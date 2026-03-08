@@ -1,0 +1,44 @@
+const express = require('express');
+const cors = require('cors');
+const cookieParser = require('cookie-parser');
+require('dotenv').config();
+const { connectDB, sequelize } = require('./config/db');
+
+const app = express();
+
+// Middleware
+app.use(express.json());
+app.use(cors({
+    origin: 'http://localhost:5173',
+    credentials: true
+}));
+app.use(cookieParser());
+
+// Routes
+app.use('/api/auth', require('./routes/authRoutes'));
+app.use('/api/users', require('./routes/userRoutes'));
+app.use('/api/jobs', require('./routes/jobRoutes'));
+app.use('/api/events', require('./routes/eventRoutes'));
+app.use('/api/mentorship', require('./routes/mentorshipRoutes'));
+app.use('/api/admin', require('./routes/adminRoutes'));
+
+app.get('/', (req, res) => {
+    res.send('Alumni Portal API is running (MySQL)...');
+});
+
+// Sync Database & Start Server
+const PORT = process.env.PORT || 5000;
+
+connectDB();
+
+// sequelize.sync({ force: false }) // Use force: true to drop and recreate tables (WARNING: data loss)
+sequelize.sync()
+    .then(() => {
+        console.log('Database synced');
+        app.listen(PORT, () => {
+            console.log(`Server running on port ${PORT}`);
+        });
+    })
+    .catch(err => {
+        console.error('Database sync error:', err);
+    });
