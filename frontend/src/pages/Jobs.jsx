@@ -2,21 +2,22 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Briefcase, MapPin, Building, DollarSign, Clock, Plus } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import './Jobs.css';
 
 const Jobs = () => {
     const [jobs, setJobs] = useState([]);
+    const [filteredJobs, setFilteredJobs] = useState([]);
     const [loading, setLoading] = useState(true);
     const { user } = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
         const fetchJobs = async () => {
             try {
                 const { data } = await axios.get('http://localhost:5000/api/jobs');
-                console.log('Jobs data received:', data);
                 setJobs(Array.isArray(data) ? data : []);
             } catch (error) {
                 console.error('Fetch jobs error:', error);
@@ -26,6 +27,16 @@ const Jobs = () => {
         };
         fetchJobs();
     }, []);
+
+    useEffect(() => {
+        const queryParams = new URLSearchParams(location.search);
+        const typeFilter = queryParams.get('type');
+        if (typeFilter) {
+            setFilteredJobs(jobs.filter(job => job.type.toLowerCase() === typeFilter.toLowerCase()));
+        } else {
+            setFilteredJobs(jobs);
+        }
+    }, [jobs, location.search]);
 
     const handleApply = async (jobId) => {
         if (!user) {
@@ -45,8 +56,8 @@ const Jobs = () => {
             <div className="container">
                 <div className="jobs-header">
                     <div>
-                        <h1>Career <span className="gradient-text">Opportunities</span></h1>
-                        <p>Explore jobs and internships posted by our alumni network.</p>
+                        <h1>{location.search.includes('Internship') ? 'Internship' : 'Career'} <span className="gradient-text">Opportunities</span></h1>
+                        <p>Explore {location.search.includes('Internship') ? 'internships' : 'jobs'} posted by our alumni network.</p>
                     </div>
                     {(user?.role === 'alumni' || user?.role === 'admin') && (
                         <button className="btn btn-primary">
@@ -59,9 +70,13 @@ const Jobs = () => {
                     <div className="loading-state">Loading jobs...</div>
                 ) : (
                     <div className="jobs-list">
-                        {jobs.map((job) => (
-                            <JobCard key={job.id} job={job} onApply={() => handleApply(job.id)} />
-                        ))}
+                        {filteredJobs.length > 0 ? (
+                            filteredJobs.map((job) => (
+                                <JobCard key={job.id} job={job} onApply={() => handleApply(job.id)} />
+                            ))
+                        ) : (
+                            <div className="no-data-msg">No {location.search.includes('Internship') ? 'internships' : 'jobs'} found for this category.</div>
+                        )}
                     </div>
                 )}
             </div>

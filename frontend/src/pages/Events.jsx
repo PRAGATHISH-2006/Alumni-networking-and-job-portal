@@ -6,6 +6,12 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import './Events.css';
 
+const featuredEvents = [
+    { id: 'f1', title: "Annual Alumni Homecoming 2026", type: "Meetup", date: "2026-12-15T18:00:00", location: "LPU Main Campus, Punjab", description: "The biggest gathering of the year! Reconnect with faculty and friends.", attendees: [1, 2, 3, 4, 5] },
+    { id: 'f2', title: "Tech Talk: Scaling to 100M Users", type: "Webinar", date: "2026-04-05T19:30:00", location: "Zoom (Virtual)", description: "Join our distinguished alumni from Netflix and Meta for an exclusive tech deep-dive.", attendees: [1, 2, 3] },
+    { id: 'f3', title: "Global Networking Mixer", type: "Social", date: "2026-05-20T20:00:00", location: "New York City / London / Dubai", description: "Simultaneous mixers across major global hubs. Find your local chapter.", attendees: [1, 2] }
+];
+
 const Events = () => {
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -16,10 +22,11 @@ const Events = () => {
         const fetchEvents = async () => {
             try {
                 const { data } = await axios.get('http://localhost:5000/api/events');
-                console.log('Events data received:', data);
-                setEvents(Array.isArray(data) ? data : []);
+                const backendEvents = Array.isArray(data) ? data : [];
+                setEvents([...featuredEvents, ...backendEvents]);
             } catch (error) {
                 console.error('Fetch events error:', error);
+                setEvents(featuredEvents);
             } finally {
                 setLoading(false);
             }

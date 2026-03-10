@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { LogIn, Mail, Lock, Loader } from 'lucide-react';
+import { motion } from 'framer-motion';
 import './Auth.css';
 
 const Login = () => {
@@ -31,9 +32,23 @@ const Login = () => {
             <div className="container">
                 <div className="glass-card auth-card">
                     <div className="auth-header">
-                        <LogIn size={48} className="auth-icon" />
-                        <h2>Welcome Back</h2>
-                        <p>Login to your account</p>
+                        <motion.div
+                            initial={{ opacity: 0, y: -20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6 }}
+                        >
+                            <LogIn size={48} className="auth-icon" style={{ margin: '0 auto 1.5rem' }} />
+                            <motion.h1
+                                initial={{ scale: 0.8, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                transition={{ delay: 0.2, type: "spring", stiffness: 100 }}
+                                className="gradient-text"
+                                style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}
+                            >
+                                ALUMNI PORTAL
+                            </motion.h1>
+                            <p>Secure Access for our Community</p>
+                        </motion.div>
                     </div>
 
                     {error && <div className="error-msg">{error}</div>}

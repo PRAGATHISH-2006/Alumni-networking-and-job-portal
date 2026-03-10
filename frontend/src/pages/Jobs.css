@@ -1,44 +1,60 @@
 .jobs-page {
-    padding: 120px 0;
+    padding: 2rem 0;
 }
 
 .jobs-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: 3rem;
+    align-items: flex-end;
+    margin-bottom: 3.5rem;
 }
 
 .jobs-header h1 {
-    font-size: 3rem;
+    font-size: 3.5rem;
+    font-weight: 800;
     margin-bottom: 0.5rem;
+    letter-spacing: -0.03em;
+}
+
+.jobs-header p {
+    font-size: 1.1rem;
+    color: var(--text-muted);
 }
 
 .jobs-list {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 2rem;
 }
 
 .job-card {
-    padding: 2rem;
-    border-radius: 12px;
+    padding: 2.5rem;
+    transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.job-card:hover {
+    transform: translateX(8px);
+    border-color: rgba(139, 92, 246, 0.4);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
 .job-main {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
 }
 
 .job-info h3 {
-    font-size: 1.5rem;
-    margin-bottom: 0.75rem;
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    letter-spacing: -0.01em;
 }
 
 .job-meta {
     display: flex;
+    flex-wrap: wrap;
     gap: 1.5rem;
     align-items: center;
     color: var(--text-muted);
@@ -47,32 +63,44 @@
 .job-meta span {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    font-size: 0.95rem;
+    gap: 0.6rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.job-meta span svg {
+    color: var(--primary-light);
 }
 
 .type-badge {
-    background: rgba(99, 102, 241, 0.1);
-    color: var(--primary);
-    padding: 0.25rem 0.75rem;
-    border-radius: 20px;
-    font-weight: 600;
-    font-size: 0.8rem !important;
+    background: rgba(139, 92, 246, 0.1);
+    color: var(--primary-light);
+    padding: 0.35rem 1rem;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.75rem !important;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: 1px solid rgba(139, 92, 246, 0.2);
 }
 
 .job-salary {
     display: flex;
     align-items: center;
-    gap: 0.25rem;
+    gap: 0.4rem;
+    background: rgba(6, 182, 212, 0.1);
     color: var(--secondary);
-    font-weight: 700;
-    font-size: 1.25rem;
+    padding: 0.75rem 1.25rem;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 1.1rem;
 }
 
 .job-desc {
     color: var(--text-muted);
-    line-height: 1.6;
-    margin-bottom: 1.5rem;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+    font-size: 0.95rem;
 }
 
 .job-footer {
@@ -80,7 +108,7 @@
     justify-content: space-between;
     align-items: center;
     border-top: 1px solid var(--glass-border);
-    padding-top: 1.5rem;
+    padding-top: 2rem;
 }
 
 .posted-at {
@@ -88,7 +116,12 @@
     font-size: 0.85rem;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.6rem;
+    font-weight: 500;
+}
+
+.posted-at svg {
+    color: var(--primary);
 }
 
 @media (max-width: 768px) {

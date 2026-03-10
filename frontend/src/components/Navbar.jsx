@@ -1,44 +1,110 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Rocket, User, LogOut, Menu, X, ChevronDown } from 'lucide-react';
+import { Rocket, ChevronDown, LogOut, Menu, X } from 'lucide-react';
 import './Navbar.css';
 
 const Navbar = () => {
-    const [isOpen, setIsOpen] = React.useState(false);
     const { user, logout } = useAuth();
+    const navigate = useNavigate();
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+    const dropdownData = [
+        {
+            label: 'Careers',
+            links: [
+                { label: 'Jobs', path: '/jobs' },
+                { label: 'Internships', path: '/jobs?type=Internship' },
+                { label: 'Search Alumni', path: '/directory' },
+                { label: 'Search Faculty', path: '/faculty' },
+                { label: 'Mentorship', path: '/mentorship' },
+                { label: 'Find a Mentor', path: '/mentorship' },
+            ]
+        },
+        {
+            label: 'Events',
+            links: [
+                { label: 'Event Registrations', path: '/events' },
+                { label: 'Alumni Event Calendar', path: '/events' },
+                { label: 'Nominations – Alumni Awards 2025', path: '/awards/nominations' },
+            ]
+        },
+        {
+            label: 'Contribute',
+            links: [
+                { label: 'Alumni Student Support Funds 2024–25', path: '/donate' },
+                { label: 'Other Alumni Fund Raising Campaigns', path: '/donate' },
+            ]
+        },
+        {
+            label: 'Benefits',
+            links: [
+                { label: 'Online Courses', path: '/courses' },
+                { label: 'Job Services', path: '/jobs' },
+                { label: 'UMS Password Reset', path: '/support' },
+            ]
+        },
+        {
+            label: 'More',
+            links: [
+                { label: 'Elite Alumni', path: '/alumni/elite' },
+                { label: 'Happenings at LPU', path: '/news' },
+                { label: 'Alumni Awards', path: '/awards' },
+                { label: 'Notable Alumni', path: '/alumni/notable' },
+                { label: 'Alumni Stories', path: '/stories' },
+                { label: 'Alumni Magazine', path: '/magazine' },
+                { label: 'News & Updates', path: '/news' },
+                { label: 'Volunteer Opportunities', path: '/volunteer' },
+                { label: 'FAQ', path: '/faq' },
+            ]
+        }
+    ];
 
     return (
         <nav className="navbar">
-            <div className="container nav-content">
-                <Link to="/" className="logo">
-                    <Rocket size={32} color="#6366f1" />
-                    <span>Alumni<span className="accent">Portal</span></span>
+            <div className="nav-container">
+                <Link to="/" className="nav-logo">
+                    <Rocket size={28} className="logo-icon" />
+                    <span>ALUMNI</span>
                 </Link>
 
-                <div className={`nav-links ${isOpen ? 'active' : ''}`}>
-                    <Link to="/directory" onClick={() => setIsOpen(false)}>Directory</Link>
-                    <Link to="/jobs" onClick={() => setIsOpen(false)}>Jobs</Link>
-                    <Link to="/events" onClick={() => setIsOpen(false)}>Events</Link>
+                <div className={`nav-menu ${isMobileMenuOpen ? 'active' : ''}`}>
+                    <ul className="nav-list">
+                        {dropdownData.map((dropdown, index) => (
+                            <li key={index} className="nav-item has-dropdown">
+                                <span className="nav-link">
+                                    {dropdown.label} <ChevronDown size={14} />
+                                </span>
+                                <ul className="dropdown-menu">
+                                    {dropdown.links.map((link, lIndex) => (
+                                        <li key={lIndex}>
+                                            <Link to={link.path} onClick={() => setIsMobileMenuOpen(false)}>
+                                                {link.label}
+                                            </Link>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </li>
+                        ))}
+                    </ul>
 
                     {user ? (
-                        <div className="user-menu">
-                            <span className="user-info">
-                                <User size={20} />
-                                {user.name}
-                            </span>
-                            <button onClick={logout} className="btn-logout">
-                                <LogOut size={18} />
-                                Logout
+                        <div className="nav-auth-info">
+                            <span className="user-name">Welcome, {user.name}</span>
+                            <button className="logout-btn" onClick={async () => {
+                                await logout();
+                                navigate('/login');
+                            }}>
+                                <LogOut size={18} /> Logout
                             </button>
                         </div>
                     ) : (
-                        <Link to="/login" className="btn btn-primary" onClick={() => setIsOpen(false)}>Login</Link>
+                        <Link to="/login" className="login-btn">Login</Link>
                     )}
                 </div>
 
-                <div className="mobile-toggle" onClick={() => setIsOpen(!isOpen)}>
-                    {isOpen ? <X size={28} /> : <Menu size={28} />}
+                <div className="mobile-toggle" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+                    {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
                 </div>
             </div>
         </nav>

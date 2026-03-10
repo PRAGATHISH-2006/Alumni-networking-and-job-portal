@@ -1,0 +1,200 @@
+.donations-page {
+    padding: 2rem 0;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.donations-header {
+    text-align: center;
+    margin-bottom: 3.5rem;
+}
+
+.donations-header h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+}
+
+/* Progress Bar */
+.progress-bar-container {
+    margin-bottom: 4rem;
+}
+
+.progress-track {
+    height: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--grad-primary);
+    box-shadow: 0 0 10px var(--glow);
+}
+
+.progress-steps {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 1rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+/* Steps Content */
+.step-container h2 {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    font-size: 2rem;
+}
+
+.fund-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.fund-card {
+    padding: 2rem;
+    cursor: pointer;
+    text-align: center;
+}
+
+.fund-card.active {
+    border-color: var(--primary);
+    box-shadow: 0 0 20px var(--glow);
+    background: rgba(139, 92, 246, 0.05);
+}
+
+.fund-icon {
+    margin-bottom: 1.5rem;
+    font-size: 2.5rem;
+}
+
+/* Amount Selection */
+.amount-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.amount-pill {
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    border: 2px solid var(--glass-border);
+    cursor: pointer;
+    font-weight: 800;
+    transition: all 0.3s ease;
+}
+
+.amount-pill.active {
+    background: var(--grad-primary);
+    border-color: transparent;
+    box-shadow: 0 0 15px var(--glow);
+}
+
+.custom-amount {
+    max-width: 400px;
+    margin: 0 auto 2.5rem;
+}
+
+/* Payment Section */
+.payment-options {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+}
+
+.payment-card {
+    flex: 1;
+    padding: 2.5rem;
+    text-align: center;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.payment-card.active {
+    border-color: var(--secondary);
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+}
+
+.qr-section {
+    text-align: center;
+    padding: 2rem;
+    background: white;
+    border-radius: 20px;
+    color: black;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.qr-container {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+.qr-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-45deg);
+    background: rgba(244, 63, 94, 0.8);
+    color: white;
+    padding: 0.2rem 1rem;
+    font-weight: 900;
+    font-size: 1.2rem;
+}
+
+.timer-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #f1f5f9;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-weight: 700;
+    color: #475569;
+}
+
+/* Success Overlay */
+.success-overlay {
+    text-align: center;
+    padding: 3rem;
+}
+
+.summary-card {
+    max-width: 400px;
+    margin: 2rem auto;
+    padding: 2rem;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.btn-group {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.next-btn {
+    display: flex;
+    margin: 0 auto;
+    gap: 0.5rem;
+}
+
+.full-width {
+    width: 100%;
+}

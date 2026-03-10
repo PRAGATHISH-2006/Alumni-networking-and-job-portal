@@ -1,0 +1,130 @@
+.support-page {
+    padding: 2rem 0;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.support-header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.support-header h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+}
+
+.support-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 2rem;
+}
+
+.support-card {
+    padding: 2.5rem;
+}
+
+.support-card.highlight {
+    border-color: var(--primary);
+    background: rgba(139, 92, 246, 0.05);
+}
+
+.support-icon {
+    width: 60px;
+    height: 60px;
+    background: var(--grad-primary);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    margin-bottom: 2rem;
+    box-shadow: 0 0 20px var(--glow);
+}
+
+.support-card h3 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.support-card p {
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+.support-steps {
+    margin-bottom: 2.5rem;
+}
+
+.step {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.step span {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(139, 92, 246, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    color: var(--primary-light);
+}
+
+.support-side {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.support-card.small {
+    padding: 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+}
+
+.support-card.small h4 {
+    margin-bottom: 0.4rem;
+    color: var(--text);
+}
+
+.support-card.small p {
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+.icon-blue {
+    color: #3b82f6;
+}
+
+.icon-purple {
+    color: #8b5cf6;
+}
+
+.icon-cyan {
+    color: #06b6d4;
+}
+
+.emergency-note {
+    margin-top: 3rem;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: rgba(244, 63, 94, 0.05);
+    border-color: rgba(244, 63, 94, 0.2);
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.emergency-note svg {
+    color: #f43f5e;
+}

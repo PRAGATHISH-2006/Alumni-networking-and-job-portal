@@ -1,82 +1,101 @@
 .events-page {
-    padding: 120px 0;
+    padding: 2rem 0;
 }
 
 .events-header {
-    text-align: center;
+    text-align: left;
     margin-bottom: 4rem;
 }
 
 .events-header h1 {
-    font-size: 3rem;
+    font-size: 3.5rem;
+    font-weight: 800;
     margin-bottom: 0.5rem;
+    letter-spacing: -0.03em;
 }
 
 .events-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 2.5rem;
 }
 
 .event-card {
     position: relative;
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
+    padding: 2.5rem;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.event-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(139, 92, 246, 0.35);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
 .event-badge {
-    position: absolute;
-    top: 1.5rem;
-    right: 1.5rem;
-    background: rgba(99, 102, 241, 0.1);
-    color: var(--primary);
-    padding: 0.25rem 0.75rem;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 600;
+    display: inline-block;
+    background: rgba(139, 92, 246, 0.15);
+    color: var(--primary-light);
+    padding: 0.4rem 1.25rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 1.5rem;
 }
 
 .event-card h3 {
-    font-size: 1.5rem;
+    font-size: 1.75rem;
+    font-weight: 700;
     margin-bottom: 1rem;
-    margin-top: 1rem;
+    color: var(--text);
+    line-height: 1.25;
 }
 
 .event-desc {
     color: var(--text-muted);
-    line-height: 1.6;
+    line-height: 1.7;
     margin-bottom: 2rem;
-    flex: 1;
+    font-size: 0.95rem;
 }
 
 .event-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    margin-bottom: 2rem;
-    color: var(--text-muted);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 16px;
+    border: 1px solid var(--glass-border);
 }
 
 .info-item {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    font-size: 0.95rem;
+    gap: 0.8rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+.info-item svg {
+    color: var(--primary);
 }
 
 .event-footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-top: 1px solid var(--glass-border);
-    padding-top: 1.5rem;
+    margin-top: auto;
 }
 
 .attendees {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    color: var(--text-muted);
+    gap: 0.6rem;
+    color: var(--secondary);
+    font-weight: 700;
     font-size: 0.9rem;
 }

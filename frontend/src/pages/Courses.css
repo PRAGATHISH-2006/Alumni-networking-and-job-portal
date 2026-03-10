@@ -1,0 +1,127 @@
+.courses-page {
+    padding: 2rem 0;
+}
+
+.courses-header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.courses-header h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+}
+
+.courses-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem;
+}
+
+.courses-categories {
+    display: flex;
+    gap: 1rem;
+}
+
+.category-pill {
+    padding: 0.6rem 1.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: 50px;
+    color: var(--text-muted);
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.category-pill.active {
+    background: var(--grad-primary);
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 0 15px var(--glow);
+}
+
+.courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2.5rem;
+}
+
+.course-card {
+    padding: 0;
+    overflow: hidden;
+    transition: all 0.4s ease;
+}
+
+.course-img {
+    position: relative;
+    height: 160px;
+    overflow: hidden;
+}
+
+.course-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.course-play {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.course-card:hover .course-play {
+    opacity: 1;
+}
+
+.course-card:hover .course-img img {
+    filter: blur(2px) brightness(0.7);
+}
+
+.course-body {
+    padding: 1.5rem;
+}
+
+.course-body h3 {
+    font-size: 1.15rem;
+    margin-bottom: 0.75rem;
+    line-height: 1.4;
+    height: 3.2rem;
+    overflow: hidden;
+}
+
+.instructor {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--primary-light);
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.course-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+.rating {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: var(--secondary);
+}
+
+.start-btn {
+    width: 100%;
+}
