@@ -1,11 +1,13 @@
 const { Job, User } = require('../models');
 
 exports.getJobs = async (req, res) => {
+    console.log('GET /api/jobs requested');
     try {
         const jobs = await Job.findAll({
             include: [{ model: User, as: 'poster', attributes: ['name', 'email'] }],
             order: [['createdAt', 'DESC']]
         });
+        console.log(`Found ${jobs.length} jobs`);
         res.json(jobs);
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });

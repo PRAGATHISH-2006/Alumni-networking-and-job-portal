@@ -2,19 +2,24 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Calendar, MapPin, Users, Video, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import './Events.css';
 
 const Events = () => {
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
+    const { user } = useAuth();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchEvents = async () => {
             try {
                 const { data } = await axios.get('http://localhost:5000/api/events');
-                setEvents(data);
+                console.log('Events data received:', data);
+                setEvents(Array.isArray(data) ? data : []);
             } catch (error) {
-                console.error(error);
+                console.error('Fetch events error:', error);
             } finally {
                 setLoading(false);
             }
@@ -23,6 +28,10 @@ const Events = () => {
     }, []);
 
     const handleRegister = async (eventId) => {
+        if (!user) {
+            navigate('/login');
+            return;
+        }
         try {
             await axios.post(`http://localhost:5000/api/events/${eventId}/register`);
             alert('Registered successfully!');
@@ -44,7 +53,7 @@ const Events = () => {
                 ) : (
                     <div className="events-grid">
                         {events.map((event) => (
-                            <EventCard key={event._id} event={event} onRegister={() => handleRegister(event._id)} />
+                            <EventCard key={event.id} event={event} onRegister={() => handleRegister(event.id)} />
                         ))}
                     </div>
                 )}
@@ -65,22 +74,22 @@ const EventCard = ({ event, onRegister }) => (
         <div className="event-info">
             <div className="info-item">
                 <Calendar size={18} />
-                <span>{new Date(event.date).toLocaleDateString()}</span>
+                <span>{event.date ? new Date(event.date).toLocaleDateString() : 'TBD'}</span>
             </div>
             <div className="info-item">
                 <Clock size={18} />
-                <span>{new Date(event.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                <span>{event.date ? new Date(event.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'TBD'}</span>
             </div>
             <div className="info-item">
                 {event.type === 'Webinar' ? <Video size={18} /> : <MapPin size={18} />}
-                <span>{event.location}</span>
+                <span>{event.location || 'Remote'}</span>
             </div>
         </div>
 
         <div className="event-footer">
             <div className="attendees">
                 <Users size={16} />
-                <span>{event.attendees.length} attending</span>
+                <span>{(event.attendees || []).length} attending</span>
             </div>
             <button className="btn btn-primary" onClick={onRegister}>Register</button>
         </div>

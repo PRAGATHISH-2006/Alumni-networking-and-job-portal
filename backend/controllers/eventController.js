@@ -1,11 +1,16 @@
 const { Event, User } = require('../models');
 
 exports.getEvents = async (req, res) => {
+    console.log('GET /api/events requested');
     try {
         const events = await Event.findAll({
-            include: [{ model: User, as: 'organizer', attributes: ['name'] }],
+            include: [
+                { model: User, as: 'organizer', attributes: ['name'] },
+                { model: User, as: 'attendees', attributes: ['id', 'name'] }
+            ],
             order: [['date', 'ASC']]
         });
+        console.log(`Found ${events.length} events`);
         res.json(events);
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });

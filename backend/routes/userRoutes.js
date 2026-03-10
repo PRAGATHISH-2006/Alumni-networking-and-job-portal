@@ -3,7 +3,7 @@ const router = express.Router();
 const { getAlumni, getUserById } = require('../controllers/userController');
 const { protect } = require('../middleware/auth');
 
-router.get('/alumni', protect, getAlumni);
-router.get('/:id', protect, getUserById);
+router.get('/alumni', getAlumni);
+router.get('/:id', getUserById);
 
 module.exports = router;

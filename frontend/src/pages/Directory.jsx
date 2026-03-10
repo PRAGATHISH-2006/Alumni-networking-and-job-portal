@@ -2,11 +2,15 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Search, MapPin, Building, GraduationCap, Filter } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import './Directory.css';
 
 const Directory = () => {
     const [alumni, setAlumni] = useState([]);
     const [loading, setLoading] = useState(true);
+    const { user } = useAuth();
+    const navigate = useNavigate();
     const [filters, setFilters] = useState({
         search: '',
         department: '',
@@ -18,9 +22,10 @@ const Directory = () => {
             setLoading(true);
             try {
                 const { data } = await axios.get('http://localhost:5000/api/users/alumni', { params: filters });
-                setAlumni(data);
+                console.log('Alumni data received:', data);
+                setAlumni(Array.isArray(data) ? data : []);
             } catch (error) {
-                console.error(error);
+                console.error('Fetch alumni error:', error);
             } finally {
                 setLoading(false);
             }
@@ -72,7 +77,7 @@ const Directory = () => {
                 ) : (
                     <div className="alumni-grid">
                         {alumni.map((person) => (
-                            <AlumniCard key={person._id} person={person} />
+                            <AlumniCard key={person.id} person={person} />
                         ))}
                     </div>
                 )}
@@ -87,31 +92,32 @@ const AlumniCard = ({ person }) => (
         className="glass-card alumni-card"
     >
         <div className="alumni-avatar">
-            {person.profile.profilePicture ? (
-                <img src={person.profile.profilePicture} alt={person.name} />
-            ) : (
-                <div className="avatar-placeholder">{person.name.charAt(0)}</div>
-            )}
+            <div className="avatar-placeholder">{person.name.charAt(0)}</div>
         </div>
         <h3>{person.name}</h3>
-        <p className="role">{person.profile.experience?.[0]?.role || 'Alumni'}</p>
+        <p className="role">{person.bio || 'Alumni'}</p>
 
         <div className="alumni-details">
             <div className="detail-item">
                 <Building size={16} />
-                <span>{person.profile.experience?.[0]?.company || 'Searching...'}</span>
+                <span>{person.skills?.[0] || 'Member'}</span>
             </div>
             <div className="detail-item">
                 <GraduationCap size={16} />
-                <span>Batch {person.profile.education?.[0]?.batchYear || 'N/A'}</span>
+                <span>Alumni Profile</span>
             </div>
             <div className="detail-item">
                 <MapPin size={16} />
-                <span>{person.profile.location || 'Remote'}</span>
+                <span>{person.location || 'Remote'}</span>
             </div>
         </div>
 
-        <button className="btn btn-outline">View Profile</button>
+        <button
+            className="btn btn-outline"
+            onClick={() => user ? navigate(`/profile/${person.id}`) : navigate('/login')}
+        >
+            View Profile
+        </button>
     </motion.div>
 );
 

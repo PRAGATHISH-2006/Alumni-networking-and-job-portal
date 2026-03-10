@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Briefcase, MapPin, Building, DollarSign, Clock, Plus } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import './Jobs.css';
 
@@ -9,14 +10,16 @@ const Jobs = () => {
     const [jobs, setJobs] = useState([]);
     const [loading, setLoading] = useState(true);
     const { user } = useAuth();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchJobs = async () => {
             try {
                 const { data } = await axios.get('http://localhost:5000/api/jobs');
-                setJobs(data);
+                console.log('Jobs data received:', data);
+                setJobs(Array.isArray(data) ? data : []);
             } catch (error) {
-                console.error(error);
+                console.error('Fetch jobs error:', error);
             } finally {
                 setLoading(false);
             }
@@ -25,6 +28,10 @@ const Jobs = () => {
     }, []);
 
     const handleApply = async (jobId) => {
+        if (!user) {
+            navigate('/login');
+            return;
+        }
         try {
             await axios.post(`http://localhost:5000/api/jobs/${jobId}/apply`);
             alert('Applied successfully!');
@@ -53,7 +60,7 @@ const Jobs = () => {
                 ) : (
                     <div className="jobs-list">
                         {jobs.map((job) => (
-                            <JobCard key={job._id} job={job} onApply={() => handleApply(job._id)} />
+                            <JobCard key={job.id} job={job} onApply={() => handleApply(job.id)} />
                         ))}
                     </div>
                 )}
@@ -83,10 +90,10 @@ const JobCard = ({ job, onApply }) => (
             </div>
         </div>
 
-        <p className="job-desc">{job.description.substring(0, 150)}...</p>
+        <p className="job-desc">{job.description ? job.description.substring(0, 150) : 'No description available'}...</p>
 
         <div className="job-footer">
-            <span className="posted-at"><Clock size={14} /> Posted {new Date(job.createdAt).toLocaleDateString()}</span>
+            <span className="posted-at"><Clock size={14} /> Posted {job.createdAt ? new Date(job.createdAt).toLocaleDateString() : 'Recent'}</span>
             <button className="btn btn-primary" onClick={onApply}>Apply Now</button>
         </div>
     </motion.div>

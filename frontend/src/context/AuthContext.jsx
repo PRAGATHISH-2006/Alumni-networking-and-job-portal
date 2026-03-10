@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
+axios.defaults.withCredentials = true;
 
 const AuthContext = createContext();
 

@@ -30,7 +30,7 @@ const Admin = () => {
     const handleApprove = async (id) => {
         try {
             await axios.put(`http://localhost:5000/api/admin/approve/${id}`);
-            setPending(pending.filter(user => user._id !== id));
+            setPending(pending.filter(user => user.id !== id));
             setStats({ ...stats, pendingAlumni: stats.pendingAlumni - 1 });
         } catch (error) {
             alert('Approval failed');
@@ -59,7 +59,7 @@ const Admin = () => {
                             <p className="no-pending">No pending approvals.</p>
                         ) : (
                             pending.map((user) => (
-                                <div key={user._id} className="glass-card pending-card">
+                                <div key={user.id} className="glass-card pending-card">
                                     <div className="user-info">
                                         <div className="user-avatar">{user.name.charAt(0)}</div>
                                         <div>
