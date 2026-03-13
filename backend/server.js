@@ -48,18 +48,23 @@ app.get('/', (req, res) => {
 // Sync Database & Start Server
 const PORT = process.env.PORT || 5000;
 
-// Sync Database
-sequelize.sync({ alter: true })
-    .then(() => {
-        console.log('Database synced');
-        if (process.env.NODE_ENV !== 'production') {
+// Sync Database (Only in dev to prevent Vercel timeouts)
+if (process.env.NODE_ENV !== 'production') {
+    sequelize.sync({ alter: false })
+        .then(() => {
+            console.log('Database synced');
             app.listen(PORT, () => {
                 console.log(`Server running on port ${PORT}`);
             });
-        }
-    })
-    .catch(err => {
-        console.error('Database sync error:', err);
-    });
+        })
+        .catch(err => {
+            console.error('Database sync error:', err);
+        });
+} else {
+    // Just authenticate in production
+    sequelize.authenticate()
+        .then(() => console.log('PostgreSQL Connected'))
+        .catch(err => console.error('DB Connection Error:', err));
+}
 
 module.exports = app;

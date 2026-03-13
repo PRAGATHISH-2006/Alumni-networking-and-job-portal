@@ -45,7 +45,11 @@ function AppContent() {
   const isUnapproved = user && user.role !== 'admin' && !user.isApproved;
   const hideSidebar = isAdminPath || user?.role === 'admin' || isAuthPath;
 
-  if (loading) return null; // Or a loading spinner
+  if (loading) return (
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', background: '#0f172a', color: 'white' }}>
+      <div className="animate-spin" style={{ width: '40px', height: '40px', border: '4px solid rgba(255,255,255,0.1)', borderTop: '4px solid #3b82f6', borderRadius: '50%' }}></div>
+    </div>
+  );
 
   // If logged in, show the full application layout
   return (
