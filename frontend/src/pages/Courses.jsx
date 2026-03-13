@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { PlayCircle, Clock, Users, Star, BookOpen, Search } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import './Courses.css';
 
 const courses = [
@@ -43,6 +44,7 @@ const courses = [
 ];
 
 const Courses = () => {
+    const navigate = useNavigate();
     return (
         <div className="courses-page">
             <header className="courses-header">
@@ -90,7 +92,12 @@ const Courses = () => {
                                 <span><Users size={14} /> {course.students}</span>
                                 <span className="rating"><Star size={14} fill="var(--secondary)" /> {course.rating}</span>
                             </div>
-                            <button className="btn btn-primary start-btn">Enroll Now</button>
+                            <button
+                                className="btn btn-primary start-btn"
+                                onClick={() => navigate(`/course/${course.id}/play`)}
+                            >
+                                Enroll Now
+                            </button>
                         </div>
                     </motion.div>
                 ))}

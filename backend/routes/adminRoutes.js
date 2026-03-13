@@ -1,10 +1,72 @@
 const express = require('express');
 const router = express.Router();
-const { getDashboardStats, getPendingAlumni, approveUser } = require('../controllers/adminController');
+const { 
+    getDashboardStats, 
+    getPendingUsers, 
+    approveUser, 
+    getAllUsers, 
+    deleteUser,
+    getAllJobs,
+    deleteJob,
+    getAllDonations,
+    getAllFeedback,
+    updateFeedbackStatus,
+    getAllStories,
+    approveStory,
+    getMentorshipRequests,
+    updateUser,
+    updateJob,
+    updateStory,
+    createStory,
+    getAllEvents,
+    createEvent,
+    updateEvent,
+    deleteEvent,
+    createJob
+} = require('../controllers/adminController');
 const { protect, authorize } = require('../middleware/auth');
 
-router.get('/stats', protect, authorize('admin'), getDashboardStats);
-router.get('/pending', protect, authorize('admin'), getPendingAlumni);
-router.put('/approve/:id', protect, authorize('admin'), approveUser);
+router.use(protect);
+router.use(authorize('admin'));
+
+router.get('/stats', getDashboardStats);
+
+// Users
+router.get('/users', getAllUsers);
+router.get('/pending-users', getPendingUsers);
+router.put('/users/:id', updateUser);
+router.put('/users/approve/:id', approveUser);
+router.delete('/users/:id', deleteUser);
+
+// Jobs
+router.get('/jobs', getAllJobs);
+router.post('/jobs', createJob);
+router.put('/jobs/:id', updateJob);
+router.delete('/jobs/:id', deleteJob);
+
+// Donations
+router.get('/donations', getAllDonations);
+
+// Feedback
+router.get('/feedback', getAllFeedback);
+router.put('/feedback/:id', updateFeedbackStatus);
+
+// Stories
+router.get('/stories', getAllStories);
+router.post('/stories', createStory);
+router.put('/stories/:id', updateStory);
+router.put('/stories/approve/:id', approveStory);
+
+// Mentorship
+router.get('/mentorship-requests', getMentorshipRequests);
+
+// Registrations
+router.get('/registrations', require('../controllers/adminController').getAllRegistrations);
+
+// Events
+router.get('/events', getAllEvents);
+router.post('/events', createEvent);
+router.put('/events/:id', updateEvent);
+router.delete('/events/:id', deleteEvent);
 
 module.exports = router;

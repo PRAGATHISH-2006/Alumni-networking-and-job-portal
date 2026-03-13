@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Search, MapPin, Building, GraduationCap, Filter } from 'lucide-react';
+import { Search, MapPin, Building, GraduationCap, Filter, MessageSquare } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -9,12 +9,18 @@ import './Directory.css';
 const Directory = () => {
     const [alumni, setAlumni] = useState([]);
     const [loading, setLoading] = useState(true);
-    const { user } = useAuth();
+    const { user, loading: authLoading } = useAuth();
     const navigate = useNavigate();
+
+    // Safety Guard
+    if (authLoading) {
+        return <div className="loading-state">Initializing...</div>;
+    }
     const [filters, setFilters] = useState({
         search: '',
         department: '',
-        batch: ''
+        batch: '',
+        company: ''
     });
 
     useEffect(() => {
@@ -57,17 +63,29 @@ const Directory = () => {
                         />
                     </div>
                     <div className="filters">
+                        <input
+                            name="company"
+                            type="text"
+                            placeholder="Filter by Company..."
+                            value={filters.company}
+                            onChange={handleFilterChange}
+                            className="directory-filter-input"
+                        />
                         <select name="department" value={filters.department} onChange={handleFilterChange}>
                             <option value="">All Departments</option>
-                            <option value="CS">Computer Science</option>
-                            <option value="IT">Information Technology</option>
-                            <option value="EE">Electrical Engineering</option>
+                            <option value="Computer Science">Computer Science</option>
+                            <option value="Information Technology">Information Technology</option>
+                            <option value="Mechanical Engineering">Mechanical Engineering</option>
+                            <option value="Civil Engineering">Civil Engineering</option>
+                            <option value="Electrical Engineering">Electrical Engineering</option>
                         </select>
                         <select name="batch" value={filters.batch} onChange={handleFilterChange}>
                             <option value="">All Batches</option>
+                            <option value="2024">2024</option>
                             <option value="2023">2023</option>
                             <option value="2022">2022</option>
                             <option value="2021">2021</option>
+                            <option value="2020">2020</option>
                         </select>
                     </div>
                 </div>
@@ -76,9 +94,16 @@ const Directory = () => {
                     <div className="loading-state">Loading alumni...</div>
                 ) : (
                     <div className="alumni-grid">
-                        {alumni.map((person) => (
-                            <AlumniCard key={person.id} person={person} />
-                        ))}
+                        {alumni.length > 0 ? (
+                            alumni.map((person) => (
+                                <AlumniCard key={person.id} person={person} user={user} navigate={navigate} />
+                            ))
+                        ) : (
+                            <div className="no-results glass-card">
+                                <h3>No alumni found</h3>
+                                <p>Try adjusting your filters or search terms.</p>
+                            </div>
+                        )}
                     </div>
                 )}
             </div>
@@ -86,13 +111,13 @@ const Directory = () => {
     );
 };
 
-const AlumniCard = ({ person }) => (
+const AlumniCard = ({ person, user, navigate }) => (
     <motion.div
         whileHover={{ y: -5 }}
         className="glass-card alumni-card"
     >
         <div className="alumni-avatar">
-            <div className="avatar-placeholder">{person.name.charAt(0)}</div>
+            <div className="avatar-placeholder">{person.name?.charAt(0) || '?'}</div>
         </div>
         <h3>{person.name}</h3>
         <p className="role">{person.bio || 'Alumni'}</p>
@@ -100,11 +125,11 @@ const AlumniCard = ({ person }) => (
         <div className="alumni-details">
             <div className="detail-item">
                 <Building size={16} />
-                <span>{person.skills?.[0] || 'Member'}</span>
+                <span>{person.company || 'Not specified'}</span>
             </div>
             <div className="detail-item">
                 <GraduationCap size={16} />
-                <span>Alumni Profile</span>
+                <span>{person.batch ? `Class of ${person.batch}` : 'Alumni'} • {person.department || 'N/A'}</span>
             </div>
             <div className="detail-item">
                 <MapPin size={16} />
@@ -112,12 +137,23 @@ const AlumniCard = ({ person }) => (
             </div>
         </div>
 
-        <button
-            className="btn btn-outline"
-            onClick={() => user ? navigate(`/profile/${person.id}`) : navigate('/login')}
-        >
-            View Profile
-        </button>
+        <div className="card-actions-row">
+            <button
+                className="btn btn-outline btn-sm"
+                onClick={() => user ? navigate(`/profile/${person.id}`) : navigate('/login')}
+            >
+                View Profile
+            </button>
+            {user && user.id !== person.id && (
+                <button
+                    className="btn btn-primary btn-sm"
+                    onClick={() => navigate(`/profile/${person.id}`)}
+                >
+                    <MessageSquare size={14} style={{ marginRight: '4px' }} /> 
+                    {person.role === 'alumni' ? 'Request Guidance' : 'Connect'}
+                </button>
+            )}
+        </div>
     </motion.div>
 );
 

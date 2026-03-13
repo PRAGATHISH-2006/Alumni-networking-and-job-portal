@@ -1,207 +1,423 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { MessageSquare, Check, X, Clock, User } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { 
+    MessageSquare, 
+    Check, 
+    X, 
+    Clock, 
+    User, 
+    Send, 
+    Search,
+    MessageCircle,
+    Users,
+    ChevronRight,
+    Loader,
+    Image,
+    ClipboardList
+} from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import './Mentorship.css';
 
-const featuredMentors = [
-    { id: 1, name: "Satish Kumar", role: "VP @ Microsoft", expertise: "Cloud & Scalable Systems", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80" },
-    { id: 2, name: "Anita Rao", role: "CEO @ GreenTech", expertise: "Sustainability & Leadership", image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80" },
-    { id: 3, name: "Rajat Verma", role: "Director @ Netflix", expertise: "Product & Media Design", image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80" }
-];
+// Removing static featuredMentors as we will fetch them dynamically
 
 const Mentorship = () => {
+    const { user, loading: authLoading } = useAuth();
+    const [activeTab, setActiveTab] = useState('browse');
+    
+    useEffect(() => {
+        if (user?.role === 'alumni') {
+            setActiveTab('requests');
+        }
+    }, [user]);
+    const [mentors, setMentors] = useState([]);
     const [requests, setRequests] = useState([]);
+    const [chats, setChats] = useState([]);
+    const [messages, setMessages] = useState([]);
+    const [selectedChat, setSelectedChat] = useState(null);
+    const [newMessage, setNewMessage] = useState('');
     const [loading, setLoading] = useState(true);
-    const [activeTab, setActiveTab] = useState('browse'); // 'browse' or 'requests'
-    const { user } = useAuth();
+    const [msgLoading, setMsgLoading] = useState(false);
+    
+    // Request Modal State
+    const [showRequestModal, setShowRequestModal] = useState(false);
+    const [selectedMentorForRequest, setSelectedMentorForRequest] = useState(null);
+    const [requestData, setRequestData] = useState({ topic: '', message: '' });
+    
+    const chatEndRef = useRef(null);
+
+    // Safety Guard: Show loading while auth initializes
+    if (authLoading) {
+        return (
+            <div className="flex items-center justify-center min-h-screen">
+                <Loader className="animate-spin text-primary" size={48} />
+            </div>
+        );
+    }
+
+    // Redirect or show message if not logged in (App.jsx usually handles this, but safety first)
+    if (!user) {
+        return <div className="p-8 text-center">Please login to access mentorship features.</div>;
+    }
+
+    const fetchData = async () => {
+        setLoading(true);
+        try {
+            const [reqRes, chatRes, mentorsRes] = await Promise.all([
+                axios.get('http://localhost:5000/api/mentorship/requests'),
+                axios.get('http://localhost:5000/api/messages/chats'),
+                axios.get('http://localhost:5000/api/users/alumni') // Fetch real alumni
+            ]);
+            // Filter for student-alumni mentorship only
+            const filteredRequests = reqRes.data.filter(req => {
+                const partner = user.id === req.mentorId ? req.student : req.mentor;
+                // If the partner is an alumni, then it's an alumni-to-alumni connection (handled in Alumni Connect)
+                // If I am alumni, I only want to see requests from students here.
+                // If I am student, I only want to see requests to alumni here.
+                if (user.role === 'alumni') {
+                    return partner.role === 'student';
+                } else {
+                    return partner.role === 'alumni';
+                }
+            });
+
+            const filteredChats = chatRes.data.filter(chat => {
+                if (user.role === 'alumni') {
+                    return chat.role === 'student';
+                } else {
+                    return chat.role === 'alumni';
+                }
+            });
+
+            setRequests(filteredRequests);
+            setChats(filteredChats);
+            setMentors(mentorsRes.data.filter(m => m.id !== user.id));
+
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        const fetchRequests = async () => {
-            try {
-                const { data } = await axios.get('http://localhost:5000/api/mentorship/requests');
-                setRequests(data);
-            } catch (error) {
-                console.error(error);
-                // Fallback sample data if backend fails
-                setRequests([
-                    { _id: '1', student: { name: 'Rahul Dev' }, mentor: { name: 'Satish Kumar' }, topic: 'Career in Cloud', message: 'I need guidance on AWS certifications.', status: 'Pending' }
-                ]);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchRequests();
+        fetchData();
     }, []);
+
+    useEffect(() => {
+        if (selectedChat) {
+            fetchMessages(selectedChat.id);
+        }
+    }, [selectedChat]);
+
+    const fetchMessages = async (partnerId) => {
+        setMsgLoading(true);
+        try {
+            const { data } = await axios.get(`http://localhost:5000/api/messages/${partnerId}`);
+            setMessages(data);
+            scrollToBottom();
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setMsgLoading(false);
+        }
+    };
+
+    const scrollToBottom = () => {
+        setTimeout(() => {
+            chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+    };
+
+    const handleSendMessage = async (e) => {
+        e.preventDefault();
+        if (!newMessage.trim() || !selectedChat) return;
+
+        try {
+            const { data } = await axios.post('http://localhost:5000/api/messages', {
+                receiverId: selectedChat.id,
+                content: newMessage
+            });
+            setMessages([...messages, data]);
+            setNewMessage('');
+            scrollToBottom();
+        } catch (error) {
+            alert('Failed to send message');
+        }
+    };
 
     const handleStatusUpdate = async (id, status) => {
         try {
             await axios.put(`http://localhost:5000/api/mentorship/${id}`, { status });
-            setRequests(requests.map(r => r._id === id ? { ...r, status } : r));
+            setRequests(requests.map(r => r.id === id ? { ...r, status } : r));
         } catch (error) {
-            alert('Status updated (Simulation)');
-            setRequests(requests.map(r => r._id === id ? { ...r, status } : r));
+            console.error(error);
         }
     };
 
-    const handleRequestMentorship = (mentorName) => {
-        const topic = prompt(`Requesting mentorship from ${mentorName}. \nWhat topic would you like to discuss?`);
-        if (!topic) return;
+    const handleSendRequest = async (e) => {
+        e.preventDefault();
+        try {
+            const { data } = await axios.post('http://localhost:5000/api/mentorship/request', {
+                mentorId: selectedMentorForRequest.id,
+                topic: requestData.topic,
+                message: requestData.message
+            });
+            alert('Mentorship request sent successfully!');
+            setShowRequestModal(false);
+            setRequestData({ topic: '', message: '' });
+            // Refresh requests
+            const reqRes = await axios.get('http://localhost:5000/api/mentorship/requests');
+            setRequests(reqRes.data);
+        } catch (error) {
+            alert(error.response?.data?.message || 'Failed to send request');
+        }
+    };
 
-        const newRequest = {
-            _id: Date.now().toString(),
-            student: { name: user?.name || 'You' },
-            mentor: { name: mentorName },
-            topic: topic,
-            message: 'Awaiting initial connection...',
-            status: 'Pending'
-        };
-
-        setRequests([newRequest, ...requests]);
-        alert(`Your request has been sent to ${mentorName}!`);
-        setActiveTab('requests');
+    const handleStartChatFromRequest = (partner) => {
+        setSelectedChat(partner);
+        setActiveTab('chats');
     };
 
     return (
         <div className="mentorship-page">
             <div className="container">
                 <div className="mentorship-tabs">
-                    <button
-                        className={`tab-btn ${activeTab === 'browse' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('browse')}
-                    >
-                        Find a Mentor
+                    {user?.role !== 'alumni' && (
+                        <button className={`tab-btn ${activeTab === 'browse' ? 'active' : ''}`} onClick={() => setActiveTab('browse')}>
+                            <Search size={18} /> Find Alumni
+                        </button>
+                    )}
+                    <button className={`tab-btn ${activeTab === 'requests' ? 'active' : ''}`} onClick={() => setActiveTab('requests')}>
+                        <Send size={18} /> Requests ({requests.length})
                     </button>
-                    <button
-                        className={`tab-btn ${activeTab === 'requests' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('requests')}
-                    >
-                        My Requests ({requests.length})
+                    <button className={`tab-btn ${activeTab === 'chats' ? 'active' : ''}`} onClick={() => setActiveTab('chats')}>
+                        <MessageSquare size={18} /> Guidance Chat
                     </button>
                 </div>
 
-                {activeTab === 'browse' ? (
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                        <div className="mentorship-header">
-                            <h1>Connect with <span className="gradient-text">Experts</span></h1>
-                            <p>Choose a mentor to guide you through your professional journey.</p>
-                        </div>
-
-                        <div className="featured-mentors-grid">
-                            {featuredMentors.map(mentor => (
-                                <div key={mentor.id} className="glass-card mentor-intro-card">
-                                    <img src={mentor.image} alt={mentor.name} className="mentor-thumb" />
-                                    <h3>{mentor.name}</h3>
-                                    <p className="mentor-role">{mentor.role}</p>
-                                    <p className="mentor-exp">Expertise: <span>{mentor.expertise}</span></p>
-                                    <button
-                                        className="btn btn-primary small-btn"
-                                        onClick={() => handleRequestMentorship(mentor.name)}
-                                    >
-                                        Request Mentorship
-                                    </button>
-                                </div>
-                            ))}
-                        </div>
-
-                        {(user?.role === 'alumni' || user?.role === 'admin') && (
-                            <>
-                                <div className="mentorship-header" style={{ marginTop: '5rem' }}>
-                                    <h2>Share Your <span className="gradient-text">Expertise</span></h2>
-                                    <p>Apply to become a mentor and help the next generation of graduates.</p>
-                                </div>
-
-                                <div className="glass-card mentor-form-card">
-                                    <form className="auth-form" onSubmit={(e) => { e.preventDefault(); alert('Application submitted successfully!'); }}>
-                                        <div className="form-row">
-                                            <div className="input-group">
-                                                <label>Industry Expertise</label>
-                                                <input type="text" placeholder="e.g. AI, Fintech, Marketing" required />
-                                            </div>
-                                            <div className="input-group">
-                                                <label>Years of Experience</label>
-                                                <input type="number" placeholder="e.g. 5" required />
-                                            </div>
+                <AnimatePresence mode="wait">
+                    {activeTab === 'browse' && (
+                        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} key="browse">
+                            <div className="mentorship-header">
+                                <h1>Our Notable <span className="gradient-text">Mentors</span></h1>
+                                <p>Learn from those who walked the path before you.</p>
+                            </div>
+                            <div className="mentors-grid">
+                                {mentors.length > 0 ? mentors.map(mentor => (
+                                    <div key={mentor.id} className="glass-card mentor-card-gl">
+                                        <div className="mentor-avatar-lg">
+                                            {mentor.name.charAt(0)}
                                         </div>
-                                        <div className="input-group">
-                                            <label>Why do you want to mentor?</label>
-                                            <textarea rows="4" placeholder="Briefly describe your motivation..."></textarea>
+                                        <div className="mentor-info">
+                                            <h3>{mentor.name}</h3>
+                                            <p className="role">{mentor.position || 'Professional'} @ {mentor.company || 'Alumni'}</p>
+                                            <p className="exp"><strong>{mentor.department || 'General'}</strong></p>
+                                            <button 
+                                                className="btn btn-primary btn-sm" 
+                                                onClick={() => {
+                                                    setSelectedMentorForRequest(mentor);
+                                                    setShowRequestModal(true);
+                                                }}>
+                                                Request Guidance
+                                            </button>
                                         </div>
-                                        <button className="btn btn-primary" type="submit">
-                                            Apply as Mentor <User size={18} />
-                                        </button>
-                                    </form>
-                                </div>
-                            </>
-                        )}
-                    </motion.div>
-                ) : (
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                        <div className="mentorship-header">
-                            <h2>Active <span className="gradient-text">Connections</span></h2>
-                            <p>Manage your mentorship requests and ongoing sessions.</p>
-                        </div>
-
-                        {loading ? (
-                            <div className="loading-state">Loading connections...</div>
-                        ) : (
-                            <div className="requests-list">
-                                {requests.length === 0 ? (
-                                    <div className="empty-state glass-card">
-                                        <MessageSquare size={48} />
-                                        <p>No active connections found. Browse mentors to get started!</p>
                                     </div>
+                                )) : <div className="p-4 text-muted">No mentors found.</div>}
+                            </div>
+                        </motion.div>
+                    )}
+
+                    {activeTab === 'requests' && (
+                        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} key="requests">
+                            <div className="mentorship-header">
+                                <h2>Mentorship <span className="gradient-text">Connections</span></h2>
+                                <p>Track your guidance requests and responses.</p>
+                            </div>
+                            <div className="requests-stack">
+                                {requests.map(req => {
+                                    const partner = user.role === 'alumni' ? req.student : req.mentor;
+                                    const isIncoming = user.role === 'alumni';
+                                    
+                                    return (
+                                        <div key={req.id} className="glass-card request-panel">
+                                            <div className="req-user">
+                                                <div className="avatar-med">{partner?.name?.charAt(0) || '?'}</div>
+                                                <div className="partner-details">
+                                                    <h4>{partner?.name || 'User'}</h4>
+                                                    <span className="relationship-tag">{isIncoming ? 'Student' : 'Mentor'}</span>
+                                                    <p className="topic-text">Topic: <strong>{req.topic}</strong></p>
+                                                </div>
+                                                <div className={`status-badge ${req.status.toLowerCase()}`}>{req.status}</div>
+                                            </div>
+                                            <div className="req-msg">"{req.message}"</div>
+                                            <div className="req-actions">
+                                                {req.status === 'Pending' && isIncoming && (
+                                                    <>
+                                                        <button className="btn btn-primary btn-sm" onClick={() => handleStatusUpdate(req.id, 'Accepted')}>Accept</button>
+                                                        <button className="btn btn-danger-ghost btn-sm" onClick={() => handleStatusUpdate(req.id, 'Rejected')}>Reject</button>
+                                                    </>
+                                                )}
+                                                {req.status === 'Accepted' && (
+                                                    <button className="btn btn-outline btn-sm" onClick={() => handleStartChatFromRequest(partner)}>
+                                                        <MessageSquare size={16} /> Start Chat
+                                                    </button>
+                                                )}
+                                                {req.status === 'Pending' && !isIncoming && (
+                                                    <span className="wait-msg">Awaiting alumni response...</span>
+                                                )}
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                                {requests.length === 0 && <div className="empty-state">No mentorship requests yet. Start by finding a mentor!</div>}
+                            </div>
+                        </motion.div>
+                    )}
+
+                    {activeTab === 'chats' && (
+                        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} key="chats" className="chat-interface glass-card">
+                            <div className="chat-sidebar">
+                                <h3>Messages</h3>
+                                <div className="chat-list">
+                                    {chats.map(chat => (
+                                        <div key={chat.id} 
+                                             className={`chat-item ${selectedChat?.id === chat.id ? 'active' : ''}`}
+                                             onClick={() => setSelectedChat(chat)}
+                                        >
+                                            <div className="avatar-xs">{chat.name.charAt(0)}</div>
+                                            <div className="chat-meta">
+                                                <h4>{chat.name}</h4>
+                                                <span>{chat.position || chat.role}</span>
+                                            </div>
+                                            <ChevronRight size={16} />
+                                        </div>
+                                    ))}
+                                    {chats.length === 0 && <div className="p-4 text-muted text-sm">No active chats. Start a connection!</div>}
+                                </div>
+                            </div>
+
+                            <div className="chat-main">
+                                {selectedChat ? (
+                                    <>
+                                        <div className="chat-header">
+                                            <div className="chat-user">
+                                                <div className="avatar-small">{selectedChat.name.charAt(0)}</div>
+                                                <div>
+                                                    <h4>{selectedChat.name}</h4>
+                                                    <span>{selectedChat.company || 'Student'}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="chat-messages">
+                                            {msgLoading ? <div className="loading-msg"><Loader className="spin" /> Loading conversation...</div> : (
+                                                <>
+                                                    {messages.map((m, idx) => (
+                                                        <div key={idx} className={`message-bubble ${m.senderId === user.id ? 'sent' : 'received'}`}>
+                                                            {m.imageUrl && (
+                                                                <div className="chat-image-container">
+                                                                    <img src={`http://localhost:5000${m.imageUrl}`} alt="Shared" className="chat-img" />
+                                                                </div>
+                                                            )}
+                                                            {m.content && <p className="msg-text">{m.content}</p>}
+                                                            <span className="msg-time">{new Date(m.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                                                        </div>
+                                                    ))}
+                                                    <div ref={chatEndRef} />
+                                                </>
+                                            )}
+                                        </div>
+                                        <form className="chat-input-area" onSubmit={handleSendMessage}>
+                                            <label className="image-upload-btn">
+                                                <Image size={24} />
+                                                <input 
+                                                    type="file" 
+                                                    accept="image/*" 
+                                                    style={{ display: 'none' }} 
+                                                    onChange={(e) => {
+                                                        const file = e.target.files[0];
+                                                        if (file) {
+                                                            const formData = new FormData();
+                                                            formData.append('receiverId', selectedChat.id);
+                                                            formData.append('image', file);
+                                                            axios.post('http://localhost:5000/api/messages', formData)
+                                                                .then(({data}) => {
+                                                                    setMessages([...messages, data]);
+                                                                    scrollToBottom();
+                                                                })
+                                                                .catch(() => alert('Failed to send image'));
+                                                        }
+                                                    }}
+                                                />
+                                            </label>
+                                            <input 
+                                                type="text" 
+                                                placeholder="Type your guidance message..." 
+                                                value={newMessage}
+                                                onChange={(e) => setNewMessage(e.target.value)}
+                                            />
+                                            <button type="submit" className="send-btn"><Send size={20} /></button>
+                                        </form>
+                                    </>
                                 ) : (
-                                    requests.map((req) => (
-                                        <RequestCard
-                                            key={req._id}
-                                            request={req}
-                                            isMentor={user?.role === 'alumni'}
-                                            onUpdate={handleStatusUpdate}
-                                        />
-                                    ))
+                                    <div className="chat-placeholder">
+                                        <MessageSquare size={64} />
+                                        <h3>Select a mentor or student to start guidance</h3>
+                                        <p>Your connections for career mapping will appear here.</p>
+                                    </div>
                                 )}
                             </div>
-                        )}
-                    </motion.div>
-                )}
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
+
+            {/* Request Guidance Modal */}
+            <AnimatePresence>
+                {showRequestModal && selectedMentorForRequest && (
+                    <div className="modal-overlay">
+                        <motion.div 
+                            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                            className="glass-card modal-card"
+                        >
+                            <div className="modal-header">
+                                <h3>Request Guidance from {selectedMentorForRequest.name}</h3>
+                                <button className="close-btn" onClick={() => setShowRequestModal(false)}><X size={24} /></button>
+                            </div>
+                            <form onSubmit={handleSendRequest} className="post-job-form">
+                                <div className="input-group">
+                                    <label>What topic do you need guidance on?</label>
+                                    <input 
+                                        type="text" 
+                                        required 
+                                        value={requestData.topic} 
+                                        onChange={(e) => setRequestData({...requestData, topic: e.target.value})} 
+                                        placeholder="e.g., Resume Review, Mock Interview, Career Advice" 
+                                    />
+                                </div>
+                                <div className="input-group">
+                                    <label>Introductory Message</label>
+                                    <textarea 
+                                        required 
+                                        value={requestData.message} 
+                                        onChange={(e) => setRequestData({...requestData, message: e.target.value})} 
+                                        placeholder={`Hi ${selectedMentorForRequest.name}, I would love to get your insights on...`} 
+                                        rows="4"
+                                    ></textarea>
+                                </div>
+                                <button type="submit" className="btn btn-primary w-full">
+                                    <Send size={18} /> Send Request
+                                </button>
+                            </form>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+
         </div>
     );
 };
-
-const RequestCard = ({ request, isMentor, onUpdate }) => (
-    <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="glass-card request-card"
-    >
-        <div className="request-user">
-            <div className="user-icon"><User size={24} /></div>
-            <div>
-                <h3>{isMentor ? request.student.name : request.mentor.name}</h3>
-                <p>{isMentor ? 'Student' : 'Mentor'}</p>
-            </div>
-            <div className={`status-badge ${request.status.toLowerCase()}`}>{request.status}</div>
-        </div>
-
-        <div className="request-body">
-            <h4>Topic: {request.topic}</h4>
-            <p>{request.message}</p>
-        </div>
-
-        {isMentor && request.status === 'Pending' && (
-            <div className="request-actions">
-                <button className="btn btn-primary" onClick={() => onUpdate(request._id, 'Accepted')}>
-                    <Check size={18} /> Accept
-                </button>
-                <button className="btn btn-outline-danger" onClick={() => onUpdate(request._id, 'Rejected')}>
-                    <X size={18} /> Reject
-                </button>
-            </div>
-        )}
-    </motion.div>
-);
 
 export default Mentorship;

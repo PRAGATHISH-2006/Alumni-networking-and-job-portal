@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
 import Home from './pages/Home';
@@ -21,6 +21,10 @@ import Support from './pages/Support';
 import Magazine from './pages/Magazine';
 import Volunteer from './pages/Volunteer';
 import FAQ from './pages/FAQ';
+import CoursePlayer from './pages/CoursePlayer';
+import EventRegister from './pages/EventRegister';
+import Profile from './pages/Profile';
+import AlumniChat from './pages/AlumniChat';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
 function App() {
@@ -35,50 +39,56 @@ function App() {
 
 function AppContent() {
   const { user, loading } = useAuth();
+  const location = useLocation();
+  const isAuthPath = location.pathname === '/login' || location.pathname === '/register';
+  const isAdminPath = location.pathname.startsWith('/admin');
+  const isUnapproved = user && user.role !== 'admin' && !user.isApproved;
+  const hideSidebar = isAdminPath || user?.role === 'admin' || isAuthPath;
 
-  if (loading) {
-    return (
-      <div className="loading-screen">
-        <div className="spinner"></div>
-      </div>
-    );
-  }
-
-  // If not logged in, we only allow Login and Register routes
-  if (!user) {
-    return (
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="*" element={<Login />} />
-      </Routes>
-    );
-  }
+  if (loading) return null; // Or a loading spinner
 
   // If logged in, show the full application layout
   return (
     <div className="layout-root">
-      <Navbar />
+      {!isAuthPath && <Navbar />}
       <div className="main-wrapper">
-        <Sidebar />
-        <main className="content-area">
+        {!hideSidebar && <Sidebar />}
+        <main className={`content-area ${hideSidebar ? 'full-width' : ''}`}>
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/directory" element={<Directory />} />
-            <Route path="/jobs" element={<Jobs />} />
-            <Route path="/events" element={<Events />} />
-            <Route path="/mentorship" element={<Mentorship />} />
-            <Route path="/admin" element={<Admin />} />
-            <Route path="/faculty" element={<Faculty />} />
-            <Route path="/donate" element={<Donations />} />
-            <Route path="/stories" element={<Stories />} />
-            <Route path="/feedback" element={<Feedback />} />
-            <Route path="/news" element={<News />} />
-            <Route path="/awards" element={<Awards />} />
-            <Route path="/awards/nominations" element={<Awards mode="nominations" />} />
-            <Route path="/alumni/elite" element={<Awards mode="elite" />} />
-            <Route path="/alumni/notable" element={<Awards mode="notable" />} />
-            <Route path="/courses" element={<Courses />} />
+            <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
+            <Route path="/register" element={!user ? <Register /> : <Navigate to="/" />} />
+            
+            <Route path="/" element={user ? <Home /> : <Navigate to="/login" />} />
+            
+            {/* All other routes are restricted if unapproved */}
+            {!isUnapproved ? (
+              <>
+                <Route path="/directory" element={<Directory />} />
+                <Route path="/jobs" element={<Jobs />} />
+                <Route path="/events" element={<Events />} />
+                <Route path="/mentorship" element={<Mentorship />} />
+                <Route path="/alumni-chat" element={<AlumniChat />} />
+                <Route path="/admin" element={<Admin />} />
+                <Route path="/faculty" element={<Faculty />} />
+                <Route path="/donate" element={<Donations />} />
+                <Route path="/stories" element={<Stories />} />
+                <Route path="/feedback" element={<Feedback />} />
+                <Route path="/news" element={<News />} />
+                <Route path="/awards" element={<Awards />} />
+                <Route path="/awards/nominations" element={<Awards mode="nominations" />} />
+                <Route path="/alumni/elite" element={<Awards mode="elite" />} />
+                <Route path="/alumni/notable" element={<Awards mode="notable" />} />
+                <Route path="/courses" element={<Courses />} />
+                <Route path="/course/:id/play" element={<CoursePlayer />} />
+                <Route path="/event/:id/register" element={<EventRegister />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/profile/:userId" element={<Profile />} />
+              </>
+            ) : (
+              // If unapproved, any attempt to access restricted routes redirects to home (which shows pending status)
+              <Route path="*" element={<Home />} />
+            )}
+            
             <Route path="/support" element={<Support />} />
             <Route path="/magazine" element={<Magazine />} />
             <Route path="/volunteer" element={<Volunteer />} />

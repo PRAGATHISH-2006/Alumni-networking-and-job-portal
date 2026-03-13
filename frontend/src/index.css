@@ -41,6 +41,11 @@
   padding: 2rem;
   background: var(--background);
   min-height: calc(100vh - 70px);
+  transition: margin-left 0.3s ease;
+}
+
+.content-area.full-width {
+  margin-left: 0;
 }
 
 @media (max-width: 1024px) {

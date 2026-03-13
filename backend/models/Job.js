@@ -29,6 +29,10 @@ const Job = sequelize.define('Job', {
     },
     salary: {
         type: DataTypes.STRING
+    },
+    isReferral: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
     }
 });
 

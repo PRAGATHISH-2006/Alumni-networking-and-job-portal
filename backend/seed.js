@@ -7,18 +7,17 @@ const seedData = async () => {
         await sequelize.sync({ force: true });
         console.log('Database synced for seeding...');
 
-        const hashedAdminPassword = await bcrypt.hash('admin123', 12);
-        const hashedAlumniPassword = await bcrypt.hash('alumni123', 12);
-        const hashedStudentPassword = await bcrypt.hash('student123', 12);
-
         // 1. Create 10 Users (1 Admin, 6 Alumni, 3 Students)
         const admin = await User.create({
             name: 'System Admin',
-            email: 'admin@college.edu',
-            password: hashedAdminPassword,
+            email: 'admin@gmail.com',
+            password: 'admin123@',
             role: 'admin',
             isApproved: true
         });
+
+        const alumniPassword = 'alumni123';
+        const studentPassword = 'student123';
 
         const alumniData = [
             { name: 'Sarah Chen', email: 'sarah.chen@google.com', company: 'Google', bio: 'Tech Lead @ Google', loc: 'Mountain View', skills: ['React', 'Go', 'K8s'] },
@@ -34,7 +33,7 @@ const seedData = async () => {
             const user = await User.create({
                 name: a.name,
                 email: a.email,
-                password: hashedAlumniPassword,
+                password: alumniPassword,
                 role: 'alumni',
                 bio: a.bio,
                 location: a.loc,
@@ -54,7 +53,7 @@ const seedData = async () => {
             await User.create({
                 name: s.name,
                 email: s.email,
-                password: hashedStudentPassword,
+                password: studentPassword,
                 role: 'student',
                 bio: s.bio,
                 location: s.loc,
@@ -63,6 +62,39 @@ const seedData = async () => {
             });
         }
         console.log('10 Users seeded!');
+
+        const { Donation, Feedback, Story, Mentorship } = require('./models');
+
+        // 2. Create 10 Donations
+        const donationData = [
+            { ft: 'Scholarship Fund', amt: 5000, donor: createdAlumni[0] },
+            { ft: 'Infrastructure Dev', amt: 15000, donor: createdAlumni[1] },
+            { ft: 'R&D Grants', amt: 25000, donor: createdAlumni[2] },
+            { ft: 'Event Sponsorship', amt: 8000, donor: createdAlumni[3] },
+            { ft: 'Scholarship Fund', amt: 2000, donor: createdAlumni[4] }
+        ];
+
+        for (const d of donationData) {
+            await Donation.create({
+                donorId: d.donor.id,
+                fundType: d.ft,
+                amount: d.amt,
+                status: 'Completed',
+                receiptId: `REC-${Math.random().toString(36).substr(2, 9).toUpperCase()}`
+            });
+        }
+        console.log('Donations seeded!');
+
+        // 3. Create 5 Feedback
+        await Feedback.create({ name: 'Alex Rivera', email: 'arivera@student.edu', type: 'Bug Report', message: 'The sidebar overlaps on mobile devices.', status: 'New' });
+        await Feedback.create({ name: 'Jordan Lee', email: 'jlee@student.edu', type: 'Feature Request', message: 'Would love a dark mode toggle.', status: 'New' });
+        await Feedback.create({ name: 'Sarah Chen', email: 'sarah.chen@google.com', type: 'General', message: 'The portal looks amazing!', status: 'Reviewed' });
+        console.log('Feedback seeded!');
+
+        // 4. Create 3 Success Stories
+        await Story.create({ userId: createdAlumni[0].id, name: 'Sarah Chen', batch: '2018', role: 'Tech Lead @ Google', quote: 'The networking here changed my life.', achievement: 'Founded DevConnect.', isPublished: true });
+        await Story.create({ userId: createdAlumni[1].id, name: 'Michael Ross', batch: '2015', role: 'Senior PM @ Tesla', quote: 'Our alumni network is my biggest asset.', achievement: 'Designed Model 3 Infotainment.', isPublished: true });
+        console.log('Stories seeded!');
 
         // 2. Create 10 Jobs
         const jobData = [

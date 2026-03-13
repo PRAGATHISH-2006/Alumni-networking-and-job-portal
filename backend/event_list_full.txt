@@ -1,0 +1,10 @@
+146620f9-ccb7-4591-b7ae-786955df4679 | Career Paths in AWS
+1f1aac7d-01ca-44d0-bfa5-79a40061e474 | Building Scalable UI
+2c9b4162-153a-466a-878c-10e8e233a538 | LPU Tech Fest 2026
+a20a1b87-c10e-4845-9790-a3b343b2e29b | SwiftUI Masterclass
+b73699c7-a55c-41a2-91f7-61fa3f10b8da | Cybersecurity Summit
+bba90b45-d43c-44bf-a9bc-8d3155c8ba4d | Alumni Homecoming 2026
+e2b1d968-bed6-4cd3-9f14-038f89d97dd2 | AI in 2026 Workshop
+f9eeb432-45ca-44c5-9902-92a1c53fac56 | Startups 101: Pivot & Scale
+fcf370d1-ab81-4b63-baf7-6a820c066ae0 | Big Tech Interview Prep
+fd468e95-2a1c-48a9-bc12-ff048bcaf562 | Product Management 101

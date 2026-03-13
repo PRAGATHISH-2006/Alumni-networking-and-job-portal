@@ -1,4 +1,5 @@
 const { Mentorship, User } = require('../models');
+const { Op } = require('sequelize');
 
 exports.requestMentorship = async (req, res) => {
     const { mentorId, message, topic } = req.body;
@@ -22,12 +23,16 @@ exports.requestMentorship = async (req, res) => {
 
 exports.getMentorshipRequests = async (req, res) => {
     try {
-        const where = req.user.role === 'alumni' ? { mentorId: req.user.id } : { studentId: req.user.id };
         const requests = await Mentorship.findAll({
-            where,
+            where: {
+                [Op.or]: [
+                    { mentorId: req.user.id },
+                    { studentId: req.user.id }
+                ]
+            },
             include: [
-                { model: User, as: 'mentor', attributes: ['name'] },
-                { model: User, as: 'student', attributes: ['name'] }
+                { model: User, as: 'mentor', attributes: ['id', 'name', 'company', 'position', 'role'] },
+                { model: User, as: 'student', attributes: ['id', 'name', 'batch', 'department', 'role'] }
             ],
             order: [['createdAt', 'DESC']]
         });

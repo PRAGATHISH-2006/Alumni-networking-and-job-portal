@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Rocket, ChevronDown, LogOut, Menu, X } from 'lucide-react';
 import './Navbar.css';
@@ -8,18 +8,38 @@ const Navbar = () => {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const location = useLocation();
 
-    const dropdownData = [
+    const isAdminView = location.pathname.toLowerCase().includes('/admin') || user?.role === 'admin';
+
+    const careersLinks = [
+        { label: 'Jobs', path: '/jobs' },
+        { label: 'Internships', path: '/jobs?type=Internship' },
+        { label: 'Search Alumni', path: '/directory' },
+        { label: 'Search Faculty', path: '/faculty' },
+        { label: 'Mentorship', path: '/mentorship' }
+    ];
+
+    if (user?.role === 'alumni') {
+        careersLinks.push({ label: 'Alumni Connect', path: '/alumni-chat' });
+    }
+
+    const isUnapproved = user && user.role !== 'admin' && !user.isApproved;
+
+    const dropdownData = isAdminView ? [] : (isUnapproved ? [
+        {
+            label: 'More',
+            links: [
+                { label: 'UMS Password Reset', path: '/support' },
+                { label: 'Alumni Magazine', path: '/magazine' },
+                { label: 'Volunteer Opportunities', path: '/volunteer' },
+                { label: 'FAQ', path: '/faq' },
+            ]
+        }
+    ] : [
         {
             label: 'Careers',
-            links: [
-                { label: 'Jobs', path: '/jobs' },
-                { label: 'Internships', path: '/jobs?type=Internship' },
-                { label: 'Search Alumni', path: '/directory' },
-                { label: 'Search Faculty', path: '/faculty' },
-                { label: 'Mentorship', path: '/mentorship' },
-                { label: 'Find a Mentor', path: '/mentorship' },
-            ]
+            links: careersLinks
         },
         {
             label: 'Events',
@@ -58,7 +78,7 @@ const Navbar = () => {
                 { label: 'FAQ', path: '/faq' },
             ]
         }
-    ];
+    ]);
 
     return (
         <nav className="navbar">
@@ -69,33 +89,40 @@ const Navbar = () => {
                 </Link>
 
                 <div className={`nav-menu ${isMobileMenuOpen ? 'active' : ''}`}>
-                    <ul className="nav-list">
-                        {dropdownData.map((dropdown, index) => (
-                            <li key={index} className="nav-item has-dropdown">
-                                <span className="nav-link">
-                                    {dropdown.label} <ChevronDown size={14} />
-                                </span>
-                                <ul className="dropdown-menu">
-                                    {dropdown.links.map((link, lIndex) => (
-                                        <li key={lIndex}>
-                                            <Link to={link.path} onClick={() => setIsMobileMenuOpen(false)}>
-                                                {link.label}
-                                            </Link>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </li>
-                        ))}
-                    </ul>
+                    {!isAdminView && (
+                        <ul className="nav-list">
+                            {dropdownData.map((dropdown, index) => (
+                                <li key={index} className="nav-item has-dropdown">
+                                    <span className="nav-link">
+                                        {dropdown.label} <ChevronDown size={14} />
+                                    </span>
+                                    <ul className="dropdown-menu">
+                                        {dropdown.links.map((link, lIndex) => (
+                                            <li key={lIndex}>
+                                                <Link to={link.path} onClick={() => setIsMobileMenuOpen(false)}>
+                                                    {link.label}
+                                                </Link>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
 
                     {user ? (
                         <div className="nav-auth-info">
-                            <span className="user-name">Welcome, {user.name}</span>
+                            <Link to="/profile" className="user-profile-link">
+                                <div className="user-avatar-small">{user.name.charAt(0)}</div>
+                                <span className="user-name">{user.name}</span>
+                            </Link>
+                            {user.role === 'admin' && <Link to="/admin" className="admin-link">Admin</Link>}
                             <button className="logout-btn" onClick={async () => {
                                 await logout();
                                 navigate('/login');
                             }}>
-                                <LogOut size={18} /> Logout
+                                <LogOut size={18} />
+                                <span className="logout-text">Logout</span>
                             </button>
                         </div>
                     ) : (

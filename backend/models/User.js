@@ -38,10 +38,64 @@ const User = sequelize.define('User', {
         type: DataTypes.TEXT, // Store as JSON string or comma-separated
         get() {
             const rawValue = this.getDataValue('skills');
-            return rawValue ? JSON.parse(rawValue) : [];
+            try {
+                return rawValue ? JSON.parse(rawValue) : [];
+            } catch (e) {
+                return [];
+            }
         },
         set(value) {
-            this.setDataValue('skills', JSON.stringify(value));
+            this.setDataValue('skills', JSON.stringify(value || []));
+        }
+    },
+    resumeUrl: {
+        type: DataTypes.STRING
+    },
+    company: {
+        type: DataTypes.STRING
+    },
+    position: {
+        type: DataTypes.STRING
+    },
+    batch: {
+        type: DataTypes.STRING
+    },
+    department: {
+        type: DataTypes.STRING
+    },
+    experience: {
+        type: DataTypes.TEXT
+    },
+    interests: {
+        type: DataTypes.TEXT,
+        get() {
+            const rawValue = this.getDataValue('interests');
+            try {
+                return rawValue ? JSON.parse(rawValue) : [];
+            } catch (e) {
+                return [];
+            }
+        },
+        set(value) {
+            this.setDataValue('interests', JSON.stringify(value || []));
+        }
+    },
+    institution: {
+        type: DataTypes.STRING,
+        defaultValue: 'Lovely Professional University'
+    },
+    links: {
+        type: DataTypes.TEXT,
+        get() {
+            const rawValue = this.getDataValue('links');
+            try {
+                return rawValue ? JSON.parse(rawValue) : [];
+            } catch (e) {
+                return [];
+            }
+        },
+        set(value) {
+            this.setDataValue('links', JSON.stringify(value || []));
         }
     },
     isApproved: {
