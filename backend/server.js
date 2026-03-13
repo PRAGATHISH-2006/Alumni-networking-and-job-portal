@@ -32,20 +32,18 @@ app.get('/', (req, res) => {
 // Sync Database & Start Server
 const PORT = process.env.PORT || 5000;
 
-if (process.env.NODE_ENV !== 'production') {
-    sequelize.sync({ alter: false })
-        .then(() => {
-            console.log('Database synced');
+// Sync Database
+sequelize.sync({ alter: true })
+    .then(() => {
+        console.log('Database synced');
+        if (process.env.NODE_ENV !== 'production') {
             app.listen(PORT, () => {
                 console.log(`Server running on port ${PORT}`);
             });
-        })
-        .catch(err => {
-            console.error('Database sync error:', err);
-        });
-} else {
-    // In production (Vercel), we just initialize the DB connection
-    connectDB();
-}
+        }
+    })
+    .catch(err => {
+        console.error('Database sync error:', err);
+    });
 
 module.exports = app;
