@@ -1,0 +1,9 @@
+Routes in eventRoutes:
+Path: /, Methods: get
+  - Middleware: <anonymous>
+Path: /:id, Methods: get
+  - Middleware: <anonymous>
+Path: /:id/register, Methods: post
+  - Middleware: protect
+  - Middleware: approved
+  - Middleware: <anonymous>

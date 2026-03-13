@@ -1,32 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Calendar, MapPin, Users, Video, Clock } from 'lucide-react';
+import { Calendar, MapPin, Users, Video, Clock, Loader } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import './Events.css';
-
-const featuredEvents = [
-    { id: 'f1', title: "Annual Alumni Homecoming 2026", type: "Meetup", date: "2026-12-15T18:00:00", location: "LPU Main Campus, Punjab", description: "The biggest gathering of the year! Reconnect with faculty and friends.", attendees: [1, 2, 3, 4, 5] },
-    { id: 'f2', title: "Tech Talk: Scaling to 100M Users", type: "Webinar", date: "2026-04-05T19:30:00", location: "Zoom (Virtual)", description: "Join our distinguished alumni from Netflix and Meta for an exclusive tech deep-dive.", attendees: [1, 2, 3] },
-    { id: 'f3', title: "Global Networking Mixer", type: "Social", date: "2026-05-20T20:00:00", location: "New York City / London / Dubai", description: "Simultaneous mixers across major global hubs. Find your local chapter.", attendees: [1, 2] }
-];
-
 const Events = () => {
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
-    const { user } = useAuth();
+    const { user, loading: authLoading } = useAuth();
     const navigate = useNavigate();
+
+    // Safety Guard
+    if (authLoading) {
+        return (
+            <div className="loading-screen">
+                <Loader className="animate-spin" size={48} />
+            </div>
+        );
+    }
 
     useEffect(() => {
         const fetchEvents = async () => {
             try {
                 const { data } = await axios.get('http://localhost:5000/api/events');
-                const backendEvents = Array.isArray(data) ? data : [];
-                setEvents([...featuredEvents, ...backendEvents]);
+                setEvents(Array.isArray(data) ? data : []);
             } catch (error) {
                 console.error('Fetch events error:', error);
-                setEvents(featuredEvents);
+                setEvents([]);
             } finally {
                 setLoading(false);
             }
@@ -34,17 +35,12 @@ const Events = () => {
         fetchEvents();
     }, []);
 
-    const handleRegister = async (eventId) => {
+    const handleRegister = (eventId) => {
         if (!user) {
             navigate('/login');
             return;
         }
-        try {
-            await axios.post(`http://localhost:5000/api/events/${eventId}/register`);
-            alert('Registered successfully!');
-        } catch (error) {
-            alert(error.response?.data?.message || 'Failed to register');
-        }
+        navigate(`/event/${eventId}/register`);
     };
 
     return (
@@ -59,9 +55,15 @@ const Events = () => {
                     <div className="loading-state">Loading events...</div>
                 ) : (
                     <div className="events-grid">
-                        {events.map((event) => (
-                            <EventCard key={event.id} event={event} onRegister={() => handleRegister(event.id)} />
-                        ))}
+                        {events.map((event) => {
+                            const isRegistered = event.attendees?.some(att => att.id === user?.id);
+                            return <EventCard 
+                                key={event.id} 
+                                event={event} 
+                                isRegistered={isRegistered}
+                                onRegister={() => handleRegister(event.id)} 
+                            />;
+                        })}
                     </div>
                 )}
             </div>
@@ -69,7 +71,7 @@ const Events = () => {
     );
 };
 
-const EventCard = ({ event, onRegister }) => (
+const EventCard = ({ event, onRegister, isRegistered }) => (
     <motion.div
         whileHover={{ scale: 1.02 }}
         className="glass-card event-card"
@@ -98,7 +100,14 @@ const EventCard = ({ event, onRegister }) => (
                 <Users size={16} />
                 <span>{(event.attendees || []).length} attending</span>
             </div>
-            <button className="btn btn-primary" onClick={onRegister}>Register</button>
+            <button 
+                className={`btn ${isRegistered ? 'btn-outline disabled' : 'btn-primary'}`} 
+                onClick={!isRegistered ? onRegister : undefined}
+                disabled={isRegistered}
+                style={isRegistered ? { opacity: 0.7, cursor: 'not-allowed' } : {}}
+            >
+                {isRegistered ? 'Already Registered' : 'Register'}
+            </button>
         </div>
     </motion.div>
 );

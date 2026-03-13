@@ -6,6 +6,94 @@
     justify-content: center;
 }
 
+.auth-card.extended {
+    max-width: 500px;
+}
+
+.step-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+.step-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--glass-border);
+    transition: all 0.3s ease;
+}
+
+.step-dot.active {
+    background: var(--primary);
+    box-shadow: 0 0 10px var(--glow);
+}
+
+.step-line {
+    width: 40px;
+    height: 2px;
+    background: var(--glass-border);
+    transition: all 0.3s ease;
+}
+
+.step-line.active {
+    background: var(--primary);
+}
+
+.role-selector {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.role-btn {
+    flex: 1;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    color: var(--text-muted);
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.role-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.role-btn.active {
+    background: var(--grad-primary);
+    border-color: transparent;
+    color: white;
+    box-shadow: 0 0 15px var(--glow);
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.form-actions .btn-outline {
+    flex: 0.4;
+}
+
+.form-actions .auth-btn {
+    flex: 1;
+}
+
+.gradient-icon {
+    color: var(--primary-light);
+    filter: drop-shadow(0 0 8px var(--glow));
+}
+
 .auth-card {
     max-width: 500px;
     width: 100%;

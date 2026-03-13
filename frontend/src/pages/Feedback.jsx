@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, MessageSquare, User, Mail, HelpingHand } from 'lucide-react';
+import axios from 'axios';
 import './Feedback.css';
 
 const Feedback = () => {
@@ -8,19 +9,37 @@ const Feedback = () => {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
-        type: 'General',
+        type: 'General Feedback',
         message: ''
     });
+    const [history, setHistory] = useState([]);
 
-    const handleSubmit = (e) => {
+    const fetchHistory = async () => {
+        try {
+            const res = await axios.get('http://localhost:5000/api/feedback/history');
+            setHistory(res.data);
+        } catch (error) {
+            console.error('Error fetching feedback history:', error);
+        }
+    };
+
+    useState(() => {
+        fetchHistory();
+    }, []);
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setStatus('sending');
-        // Simulate API call
-        setTimeout(() => {
+        try {
+            await axios.post('http://localhost:5000/api/feedback', formData);
             setStatus('success');
-            setFormData({ name: '', email: '', type: 'General', message: '' });
+            setFormData({ name: '', email: '', type: 'General Feedback', message: '' });
+            fetchHistory();
             setTimeout(() => setStatus('idle'), 5000);
-        }, 1500);
+        } catch (error) {
+            alert('Failed to send feedback');
+            setStatus('idle');
+        }
     };
 
     return (
@@ -127,14 +146,27 @@ const Feedback = () => {
                 </AnimatePresence>
 
                 <div className="feedback-info">
-                    <div className="info-card glass-card">
-                        <h3>Community Support</h3>
-                        <p>Our team reviews every piece of feedback to ensure the best experience for our alumni.</p>
-                        <ul className="info-list">
-                            <li>Check regular updates in the News section.</li>
-                            <li>Join the Mentorship program for 1:1 help.</li>
-                            <li>Report critical bugs via the ELITE portal.</li>
-                        </ul>
+                    <div className="info-card glass-card history-card">
+                        <h3>My Feedback History</h3>
+                        <div className="history-list">
+                            {history.length > 0 ? history.map(item => (
+                                <div key={item.id} className="history-item">
+                                    <div className="history-header">
+                                        <span className={`status-dot ${item.status?.toLowerCase()}`}></span>
+                                        <strong>{item.type}</strong>
+                                        <span className="history-date">{new Date(item.createdAt).toLocaleDateString()}</span>
+                                    </div>
+                                    <p className="history-msg">"{item.message}"</p>
+                                    {item.adminResponse && (
+                                        <div className="admin-reply">
+                                            <p><strong>Admin Response:</strong> {item.adminResponse}</p>
+                                        </div>
+                                    )}
+                                </div>
+                            )) : (
+                                <p style={{ color: '#64748b', fontSize: '0.9rem' }}>No previous feedback discovered.</p>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>

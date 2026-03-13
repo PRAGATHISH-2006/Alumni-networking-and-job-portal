@@ -59,6 +59,24 @@
 .filters {
     display: flex;
     gap: 1rem;
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+}
+
+.directory-filter-input {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    color: var(--text);
+    padding: 0.75rem 1.25rem;
+    border-radius: 12px;
+    outline: none;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    min-width: 200px;
+}
+
+.directory-filter-input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 10px var(--glow);
 }
 
 .filters select {

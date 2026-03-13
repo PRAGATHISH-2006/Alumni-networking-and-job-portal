@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const User = require('../models/User');
+const { User } = require('../models');
 
 const protect = async (req, res, next) => {
     let token;
@@ -19,6 +19,11 @@ const protect = async (req, res, next) => {
         req.user = await User.findByPk(decoded.id, {
             attributes: { exclude: ['password'] }
         });
+
+        if (!req.user) {
+            return res.status(401).json({ message: 'User not found' });
+        }
+
         next();
     } catch (error) {
         res.status(401).json({ message: 'Not authorized, token failed' });
@@ -34,4 +39,14 @@ const authorize = (...roles) => {
     };
 };
 
-module.exports = { protect, authorize };
+const approved = (req, res, next) => {
+    if (!req.user) {
+        return res.status(401).json({ message: 'Not authorized' });
+    }
+    if (req.user.role !== 'admin' && !req.user.isApproved) {
+        return res.status(403).json({ message: 'Account pending approval. Please wait for administrator verification.' });
+    }
+    next();
+};
+
+module.exports = { protect, authorize, approved };

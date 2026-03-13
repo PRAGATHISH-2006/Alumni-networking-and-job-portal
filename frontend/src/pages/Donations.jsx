@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, CreditCard, ChevronRight, CheckCircle2, Download, QrCode, Timer, ShieldCheck, Wallet } from 'lucide-react';
+import axios from 'axios';
 import './Donations.css';
 
 const DonationSteps = {
@@ -28,6 +29,25 @@ const Donations = () => {
     });
     const [timeLeft, setTimeLeft] = useState(10);
     const [customAmount, setCustomAmount] = useState('');
+    const [cardData, setCardData] = useState({
+        number: '',
+        expiry: '',
+        cvv: ''
+    });
+
+    const handlePayment = async (method) => {
+        try {
+            await axios.post('http://localhost:5000/api/donate', {
+                fundType: selection.type.title,
+                amount: Number(selection.amount),
+                paymentMethod: method
+            });
+            setStep(DonationSteps.SUCCESS);
+        } catch (e) {
+            console.error('Payment Error:', e);
+            alert('Payment failed. Please try again.');
+        }
+    };
 
     useEffect(() => {
         let timer;
@@ -36,7 +56,7 @@ const Donations = () => {
                 setTimeLeft((prev) => {
                     if (prev <= 1) {
                         clearInterval(timer);
-                        setStep(DonationSteps.SUCCESS);
+                        handlePayment('gpay');
                         return 0;
                     }
                     return prev - 1;
@@ -168,13 +188,38 @@ const Donations = () => {
                             <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} className="card-mock-section">
                                 <div className="input-group">
                                     <label>Card Number</label>
-                                    <input type="text" placeholder="4242 4242 4242 4242" defaultValue="4242 4242 4242 4242" readOnly />
+                                    <input 
+                                        type="text" 
+                                        placeholder="4242 4242 4242 4242" 
+                                        value={cardData.number}
+                                        onChange={(e) => setCardData({...cardData, number: e.target.value})}
+                                    />
                                 </div>
                                 <div className="form-row">
-                                    <div className="input-group"><label>Expiry</label><input type="text" placeholder="12/28" defaultValue="12/28" readOnly /></div>
-                                    <div className="input-group"><label>CVV</label><input type="text" placeholder="***" defaultValue="123" readOnly /></div>
+                                    <div className="input-group">
+                                        <label>Expiry</label>
+                                        <input 
+                                            type="text" 
+                                            placeholder="12/28" 
+                                            value={cardData.expiry}
+                                            onChange={(e) => setCardData({...cardData, expiry: e.target.value})}
+                                        />
+                                    </div>
+                                    <div className="input-group">
+                                        <label>CVV</label>
+                                        <input 
+                                            type="text" 
+                                            placeholder="***" 
+                                            value={cardData.cvv}
+                                            onChange={(e) => setCardData({...cardData, cvv: e.target.value})}
+                                        />
+                                    </div>
                                 </div>
-                                <button className="btn btn-primary full-width" onClick={() => setStep(DonationSteps.SUCCESS)}>
+                                <button 
+                                    className="btn btn-primary full-width" 
+                                    onClick={() => handlePayment('card')}
+                                    disabled={!cardData.number || !cardData.expiry || !cardData.cvv}
+                                >
                                     Complete Payment (₹{selection.amount})
                                 </button>
                             </motion.div>

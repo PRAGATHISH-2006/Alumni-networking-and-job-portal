@@ -29,6 +29,10 @@ const Event = sequelize.define('Event', {
     },
     imageUrl: {
         type: DataTypes.STRING
+    },
+    price: {
+        type: DataTypes.FLOAT,
+        defaultValue: 0
     }
 });
 

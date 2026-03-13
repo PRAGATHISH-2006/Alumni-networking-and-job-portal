@@ -17,12 +17,14 @@ const generateToken = (res, id) => {
 };
 
 exports.registerUser = async (req, res) => {
-    const { name, email, password, role } = req.body;
+    const { name, email, password, role, batch, department } = req.body;
 
     try {
+        console.log('Registration attempt:', { email, role });
         const userExists = await User.findOne({ where: { email } });
 
         if (userExists) {
+            console.log('Registration failed: User already exists');
             return res.status(400).json({ message: 'User already exists' });
         }
 
@@ -31,20 +33,27 @@ exports.registerUser = async (req, res) => {
             email,
             password,
             role,
-            isApproved: role === 'student'
+            isApproved: false,
+            skills: req.body.skills || [],
+            company: req.body.company || '',
+            position: req.body.position || '',
+            batch: batch || '',
+            department: department || '',
+            location: req.body.location || ''
         });
 
         if (user) {
+            console.log('Registration successful:', user.id);
             const token = generateToken(res, user.id);
+            const userResponse = user.toJSON();
+            delete userResponse.password;
             res.status(201).json({
-                id: user.id,
-                name: user.name,
-                email: user.email,
-                role: user.role,
+                ...userResponse,
                 token
             });
         }
     } catch (error) {
+        console.error('Registration Error:', error);
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 };
@@ -53,21 +62,31 @@ exports.loginUser = async (req, res) => {
     const { email, password } = req.body;
 
     try {
+        console.log('Login attempt:', email);
         const user = await User.findOne({ where: { email } });
 
-        if (user && (await user.comparePassword(password))) {
+        if (!user) {
+            console.log('Login failed: User not found');
+            return res.status(401).json({ message: 'Invalid email or password' });
+        }
+
+        console.log('User found, comparing passwords...');
+        const isMatch = await user.comparePassword(password);
+        console.log('Password match:', isMatch);
+
+        if (isMatch) {
             const token = generateToken(res, user.id);
+            const userResponse = user.toJSON();
+            delete userResponse.password;
             res.json({
-                id: user.id,
-                name: user.name,
-                email: user.email,
-                role: user.role,
+                ...userResponse,
                 token
             });
         } else {
             res.status(401).json({ message: 'Invalid email or password' });
         }
     } catch (error) {
+        console.error('Login Error:', error);
         res.status(500).json({ message: 'Server error' });
     }
 };

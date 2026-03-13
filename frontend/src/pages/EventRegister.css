@@ -1,0 +1,394 @@
+.event-register-page {
+    padding: 3rem 0;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.register-header {
+    margin-bottom: 4rem;
+}
+
+.back-link {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    margin-bottom: 1.5rem;
+}
+
+.status-selector {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.status-btn {
+    flex: 1;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    color: var(--text-muted);
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.status-btn.active {
+    background: var(--grad-primary);
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 0 10px var(--glow);
+}
+
+.payment-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--glass-border);
+    margin-bottom: 2rem;
+}
+
+.pay-tab {
+    padding: 1rem 2rem;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-weight: 700;
+    cursor: pointer;
+    position: relative;
+}
+
+.pay-tab.active {
+    color: var(--primary-light);
+}
+
+.pay-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--primary);
+}
+
+.gpay-qr {
+    text-align: center;
+    padding: 2rem;
+}
+
+.qr-container {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 16px;
+    display: inline-block;
+    margin-bottom: 1rem;
+}
+
+.countdown {
+    color: var(--secondary);
+    font-weight: 700;
+}
+
+/* Visual Receipt Styles */
+.receipt-card {
+    width: 210mm;
+    /* A4 width */
+    padding: 40px;
+    background: white;
+    color: #1a1a1a;
+    font-family: 'Inter', sans-serif;
+    position: relative;
+    border: 10px solid #f8f9fa;
+    border-radius: 4px;
+}
+
+.receipt-header {
+    text-align: center;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 30px;
+    margin-bottom: 30px;
+}
+
+.receipt-header h2 {
+    color: var(--primary);
+    margin: 10px 0 5px 0;
+    font-size: 28px;
+    text-transform: uppercase;
+}
+
+.receipt-header p {
+    color: #666;
+    font-size: 16px;
+}
+
+.receipt-details {
+    padding: 20px 0;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 0;
+    border-bottom: 1px dashed #eee;
+}
+
+.detail-row span {
+    color: #7f8c8d;
+    font-weight: 500;
+}
+
+.detail-row strong {
+    color: #2c3e50;
+}
+
+.detail-row strong.amount {
+    color: var(--primary);
+    font-size: 20px;
+}
+
+.receipt-footer {
+    margin-top: 40px;
+    text-align: center;
+    padding-top: 20px;
+    border-top: 2px solid #eee;
+}
+
+.receipt-footer p {
+    color: #95a5a6;
+    font-style: italic;
+    font-size: 14px;
+}
+
+.receipt-stamp {
+    position: absolute;
+    bottom: 50px;
+    right: 50px;
+    border: 4px solid #27ae60;
+    color: #27ae60;
+    padding: 10px 20px;
+    font-size: 32px;
+    font-weight: 900;
+    text-transform: uppercase;
+    transform: rotate(-15deg);
+    opacity: 0.2;
+    border-radius: 8px;
+}
+
+.register-stepper {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4rem;
+    position: relative;
+}
+
+.register-stepper::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 10%;
+    right: 10%;
+    height: 2px;
+    background: var(--glass-border);
+    z-index: 1;
+}
+
+.step-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 2;
+    width: 120px;
+}
+
+.step-point {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 2px solid var(--glass-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.75rem;
+    transition: all 0.3s ease;
+}
+
+.step-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-muted);
+}
+
+.step-item.active .step-point {
+    background: var(--grad-primary);
+    border-color: transparent;
+    box-shadow: 0 0 15px var(--glow);
+    color: white;
+}
+
+.step-item.active .step-label {
+    color: var(--primary-light);
+}
+
+.step-item.done .step-point {
+    background: var(--secondary);
+    border-color: transparent;
+    color: white;
+}
+
+.register-card {
+    padding: 4rem;
+}
+
+.step-form h2 {
+    font-size: 1.8rem;
+    margin-bottom: 2.5rem;
+}
+
+.review-box {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 2rem;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.review-item strong {
+    color: var(--primary-light);
+    margin-right: 0.5rem;
+}
+
+.confirmation-note {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 2rem;
+}
+
+.register-actions {
+    margin-top: 3.5rem;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1.5rem;
+}
+
+/* Success / Ticket Styles */
+.registration-success-page {
+    padding: 5rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ticket-container {
+    width: 100%;
+    max-width: 900px;
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 4rem;
+    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+}
+
+.ticket-header {
+    background: var(--grad-primary);
+    padding: 1rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ticket-badge {
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+}
+
+.ticket-main {
+    display: flex;
+    padding: 4rem 3rem;
+}
+
+.ticket-left {
+    flex: 1;
+    padding-right: 3rem;
+    border-right: 2px dashed var(--glass-border);
+}
+
+.ticket-left h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.ticket-info-grid {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+}
+
+.ticket-info-grid .info-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 700;
+    color: var(--primary-light);
+}
+
+.attendee-info p {
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.attendee-info strong {
+    color: var(--secondary);
+}
+
+.ticket-right {
+    width: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 3rem;
+}
+
+.qr-sim {
+    text-align: center;
+}
+
+.qr-box {
+    width: 140px;
+    height: 140px;
+    background: white;
+    margin-bottom: 1rem;
+    border-radius: 12px;
+    position: relative;
+}
+
+.qr-box::after {
+    content: 'QR';
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    font-weight: 900;
+    font-size: 2rem;
+}
+
+.qr-sim p {
+    font-size: 0.7rem;
+    font-weight: 900;
+    opacity: 0.6;
+}
+
+.success-actions {
+    display: flex;
+    gap: 1.5rem;
+}

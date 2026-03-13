@@ -38,8 +38,18 @@ export const AuthProvider = ({ children }) => {
         setUser(null);
     };
 
+    const updateUser = async (userData) => {
+        try {
+            const { data } = await axios.put('http://localhost:5000/api/users/profile', userData);
+            setUser(data);
+            return data;
+        } catch (error) {
+            throw error;
+        }
+    };
+
     return (
-        <AuthContext.Provider value={{ user, loading, login, register, logout }}>
+        <AuthContext.Provider value={{ user, loading, login, register, logout, updateUser }}>
             {children}
         </AuthContext.Provider>
     );

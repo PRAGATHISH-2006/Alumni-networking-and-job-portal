@@ -1,9 +1,21 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Briefcase, Users, Calendar, Award } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import StudentDashboard from './StudentDashboard';
+import AlumniDashboard from './AlumniDashboard';
+import AdminDashboard from './Admin';
 import './Home.css';
 
 const Home = () => {
+    const { user } = useAuth();
+
+    if (user) {
+        if (user.role === 'student') return <StudentDashboard />;
+        if (user.role === 'alumni') return <AlumniDashboard />;
+        if (user.role === 'admin') return <AdminDashboard />;
+    }
+
     return (
         <div className="home-page">
             <section className="hero">

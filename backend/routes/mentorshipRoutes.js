@@ -1,9 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const { requestMentorship, getMentorshipRequests, updateMentorshipStatus } = require('../controllers/mentorshipController');
-const { protect } = require('../middleware/auth');
+const { protect, approved } = require('../middleware/auth');
 
-router.post('/request', protect, requestMentorship);
+router.use(protect);
+router.use(approved);
+
+router.post('/request', requestMentorship);
 router.get('/requests', protect, getMentorshipRequests);
 router.put('/:id', protect, updateMentorshipStatus);
 
