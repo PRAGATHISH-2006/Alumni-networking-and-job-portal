@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+<<<<<<< HEAD
 import API from '../api/axios';
+=======
+import axios from 'axios';
+>>>>>>> c1c6cd0974127645dd41ee07bb95326593fd51e6
 import { motion, AnimatePresence } from 'framer-motion';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';

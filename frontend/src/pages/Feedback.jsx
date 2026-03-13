@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, MessageSquare, User, Mail, HelpingHand } from 'lucide-react';
+<<<<<<< HEAD
 import API from '../api/axios';
+=======
+import axios from 'axios';
+>>>>>>> c1c6cd0974127645dd41ee07bb95326593fd51e6
 import './Feedback.css';
 
 const Feedback = () => {
@@ -16,7 +20,11 @@ const Feedback = () => {
 
     const fetchHistory = async () => {
         try {
+<<<<<<< HEAD
             const res = await API.get('/api/feedback/history');
+=======
+            const res = await axios.get('http://localhost:5000/api/feedback/history');
+>>>>>>> c1c6cd0974127645dd41ee07bb95326593fd51e6
             setHistory(res.data);
         } catch (error) {
             console.error('Error fetching feedback history:', error);
@@ -31,7 +39,11 @@ const Feedback = () => {
         e.preventDefault();
         setStatus('sending');
         try {
+<<<<<<< HEAD
             await API.post('/api/feedback', formData);
+=======
+            await axios.post('http://localhost:5000/api/feedback', formData);
+>>>>>>> c1c6cd0974127645dd41ee07bb95326593fd51e6
             setStatus('success');
             setFormData({ name: '', email: '', type: 'General Feedback', message: '' });
             fetchHistory();

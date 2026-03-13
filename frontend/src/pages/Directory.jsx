@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
+<<<<<<< HEAD
 import API from '../api/axios';
+=======
+import axios from 'axios';
+>>>>>>> c1c6cd0974127645dd41ee07bb95326593fd51e6
 import { Search, MapPin, Building, GraduationCap, Filter, MessageSquare } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';

@@ -39,7 +39,11 @@ export const AuthProvider = ({ children }) => {
 
     const updateUser = async (userData) => {
         try {
+<<<<<<< HEAD
             const { data } = await API.put('/api/users/profile', userData);
+=======
+            const { data } = await axios.put('http://localhost:5000/api/users/profile', userData);
+>>>>>>> c1c6cd0974127645dd41ee07bb95326593fd51e6
             setUser(data);
             return data;
         } catch (error) {

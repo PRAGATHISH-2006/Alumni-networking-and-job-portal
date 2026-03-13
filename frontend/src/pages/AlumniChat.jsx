@@ -1,5 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
+<<<<<<< HEAD
 import API from '../api/axios';
+=======
+import axios from 'axios';
+>>>>>>> c1c6cd0974127645dd41ee07bb95326593fd51e6
 import { 
     MessageSquare, 
     Check, 
@@ -35,8 +39,13 @@ const AlumniChat = () => {
         setLoading(true);
         try {
             const [reqRes, chatRes] = await Promise.all([
+<<<<<<< HEAD
                 API.get('/api/mentorship/requests'),
                 API.get('/api/messages/chats')
+=======
+                axios.get('http://localhost:5000/api/mentorship/requests'),
+                axios.get('http://localhost:5000/api/messages/chats')
+>>>>>>> c1c6cd0974127645dd41ee07bb95326593fd51e6
             ]);
 
             // Filter for alumni-to-alumni only
@@ -90,7 +99,11 @@ const AlumniChat = () => {
         if (!newMessage.trim() || !selectedChat) return;
 
         try {
+<<<<<<< HEAD
             const { data } = await API.post('/api/messages', {
+=======
+            const { data } = await axios.post('http://localhost:5000/api/messages', {
+>>>>>>> c1c6cd0974127645dd41ee07bb95326593fd51e6
                 receiverId: selectedChat.id,
                 content: newMessage
             });
@@ -253,7 +266,11 @@ const AlumniChat = () => {
                                                             const formData = new FormData();
                                                             formData.append('receiverId', selectedChat.id);
                                                             formData.append('image', file);
+<<<<<<< HEAD
                                                             API.post('/api/messages', formData)
+=======
+                                                            axios.post('http://localhost:5000/api/messages', formData)
+>>>>>>> c1c6cd0974127645dd41ee07bb95326593fd51e6
                                                                 .then(({data}) => {
                                                                     setMessages([...messages, data]);
                                                                     scrollToBottom();

@@ -9,7 +9,11 @@ const app = express();
 // Middleware
 app.use(express.json());
 app.use(cors({
+<<<<<<< HEAD
     origin: process.env.FRONTEND_URL ? [process.env.FRONTEND_URL, 'http://localhost:5173'] : ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:3000', 'http://127.0.0.1:5173'],
+=======
+    origin: ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:3000', 'http://127.0.0.1:5173'],
+>>>>>>> c1c6cd0974127645dd41ee07bb95326593fd51e6
     credentials: true
 }));
 app.use(cookieParser());

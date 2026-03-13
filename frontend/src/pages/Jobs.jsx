@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
+<<<<<<< HEAD
 import API from '../api/axios';
+=======
+import axios from 'axios';
+>>>>>>> c1c6cd0974127645dd41ee07bb95326593fd51e6
 import { 
     Briefcase, 
     MapPin, 
@@ -50,7 +54,11 @@ const Jobs = () => {
 
     const fetchJobs = async () => {
         try {
+<<<<<<< HEAD
             const { data } = await API.get('/api/jobs');
+=======
+            const { data } = await axios.get('http://localhost:5000/api/jobs');
+>>>>>>> c1c6cd0974127645dd41ee07bb95326593fd51e6
             setJobs(Array.isArray(data) ? data : []);
         } catch (error) {
             console.error('Fetch jobs error:', error);
@@ -115,7 +123,11 @@ const Jobs = () => {
         e.preventDefault();
         setIsPosting(true);
         try {
+<<<<<<< HEAD
             await API.post('/api/jobs', newJob);
+=======
+            await axios.post('http://localhost:5000/api/jobs', newJob);
+>>>>>>> c1c6cd0974127645dd41ee07bb95326593fd51e6
             setShowPostModal(false);
             setNewJob({ title: '', company: '', location: '', type: 'Full-time', description: '', salary: '', isReferral: false });
             fetchJobs();
