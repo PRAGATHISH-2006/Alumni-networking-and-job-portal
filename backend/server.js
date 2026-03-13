@@ -9,11 +9,7 @@ const app = express();
 // Middleware
 app.use(express.json());
 app.use(cors({
-<<<<<<< HEAD
     origin: process.env.FRONTEND_URL ? [process.env.FRONTEND_URL, 'http://localhost:5173'] : ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:3000', 'http://127.0.0.1:5173'],
-=======
-    origin: ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:3000', 'http://127.0.0.1:5173'],
->>>>>>> c1c6cd0974127645dd41ee07bb95326593fd51e6
     credentials: true
 }));
 app.use(cookieParser());
@@ -36,16 +32,20 @@ app.get('/', (req, res) => {
 // Sync Database & Start Server
 const PORT = process.env.PORT || 5000;
 
-connectDB();
-
-// sequelize.sync({ force: false }) // Use force: true to drop and recreate tables (WARNING: data loss)
-sequelize.sync({ alter: false })
-    .then(() => {
-        console.log('Database synced');
-        app.listen(PORT, () => {
-            console.log(`Server running on port ${PORT}`);
+if (process.env.NODE_ENV !== 'production') {
+    sequelize.sync({ alter: false })
+        .then(() => {
+            console.log('Database synced');
+            app.listen(PORT, () => {
+                console.log(`Server running on port ${PORT}`);
+            });
+        })
+        .catch(err => {
+            console.error('Database sync error:', err);
         });
-    })
-    .catch(err => {
-        console.error('Database sync error:', err);
-    });
+} else {
+    // In production (Vercel), we just initialize the DB connection
+    connectDB();
+}
+
+module.exports = app;

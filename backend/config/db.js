@@ -1,15 +1,15 @@
 const { Sequelize } = require('sequelize');
 require('dotenv').config();
 
-const sequelize = process.env.DB_URL 
-    ? new Sequelize(process.env.DB_URL, {
-        dialect: 'mysql',
-        logging: false,
+const sequelize = process.env.POSTGRES_URL 
+    ? new Sequelize(process.env.POSTGRES_URL, {
+        dialect: 'postgres',
         dialectOptions: {
             ssl: {
-                rejectUnauthorized: false // Required for some cloud providers like Aiven
+                rejectUnauthorized: false
             }
-        }
+        },
+        logging: false
     })
     : new Sequelize(
         process.env.DB_NAME,
