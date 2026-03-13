@@ -25,7 +25,7 @@ const sequelize = process.env.POSTGRES_URL
 const connectDB = async () => {
     try {
         await sequelize.authenticate();
-        console.log('MySQL Connected (Sequelize)...');
+        console.log(`${sequelize.getDialect().toUpperCase()} Connected (Sequelize)...`);
     } catch (err) {
         console.error('Unable to connect to the database:', err);
         process.exit(1);
