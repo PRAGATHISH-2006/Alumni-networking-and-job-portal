@@ -7,12 +7,12 @@
       "destination": "/api/index.js"
     },
     {
-      "source": "/assets/(.*)",
-      "destination": "/frontend/dist/assets/$1"
+      "source": "/(.*)",
+      "destination": "/public/$1"
     },
     {
-      "source": "/((?!api|assets).*)",
-      "destination": "/frontend/dist/index.html"
+      "source": "/(.*)",
+      "destination": "/public/index.html"
     }
   ]
 }
