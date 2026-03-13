@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import API from '../api/axios';
 import { useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
@@ -167,7 +167,7 @@ const Profile = () => {
     const handleSendRequest = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:5000/api/mentorship/request', {
+            await API.post('/api/mentorship/request', {
                 mentorId: viewedUser.id,
                 topic: requestData.topic,
                 message: requestData.message

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import API from '../api/axios';
 import { Search, MapPin, Building, GraduationCap, Filter, MessageSquare } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
@@ -27,7 +27,7 @@ const Directory = () => {
         const fetchAlumni = async () => {
             setLoading(true);
             try {
-                const { data } = await axios.get('http://localhost:5000/api/users/alumni', { params: filters });
+                const { data } = await API.get('/api/users/alumni', { params: filters });
                 console.log('Alumni data received:', data);
                 setAlumni(Array.isArray(data) ? data : []);
             } catch (error) {

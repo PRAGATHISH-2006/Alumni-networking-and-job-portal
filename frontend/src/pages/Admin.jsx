@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import API from '../api/axios';
 import { 
     LayoutDashboard, 
     Users, 
@@ -59,7 +59,7 @@ const Admin = () => {
         setLoading(true);
         setError(null);
         try {
-            const statsRes = await axios.get('http://localhost:5000/api/admin/stats');
+            const statsRes = await API.get('/api/admin/stats');
             setStats(statsRes.data);
             loadTabData(activeTab);
         } catch (err) {

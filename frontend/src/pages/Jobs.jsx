@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import API from '../api/axios';
 import { 
     Briefcase, 
     MapPin, 
@@ -50,7 +50,7 @@ const Jobs = () => {
 
     const fetchJobs = async () => {
         try {
-            const { data } = await axios.get('http://localhost:5000/api/jobs');
+            const { data } = await API.get('/api/jobs');
             setJobs(Array.isArray(data) ? data : []);
         } catch (error) {
             console.error('Fetch jobs error:', error);
@@ -115,7 +115,7 @@ const Jobs = () => {
         e.preventDefault();
         setIsPosting(true);
         try {
-            await axios.post('http://localhost:5000/api/jobs', newJob);
+            await API.post('/api/jobs', newJob);
             setShowPostModal(false);
             setNewJob({ title: '', company: '', location: '', type: 'Full-time', description: '', salary: '', isReferral: false });
             fetchJobs();

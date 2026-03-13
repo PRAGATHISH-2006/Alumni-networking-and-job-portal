@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
+import API from '../api/axios';
 import { 
     MessageSquare, 
     Check, 
@@ -64,9 +64,9 @@ const Mentorship = () => {
         setLoading(true);
         try {
             const [reqRes, chatRes, mentorsRes] = await Promise.all([
-                axios.get('http://localhost:5000/api/mentorship/requests'),
-                axios.get('http://localhost:5000/api/messages/chats'),
-                axios.get('http://localhost:5000/api/users/alumni') // Fetch real alumni
+                API.get('/api/mentorship/requests'),
+                API.get('/api/messages/chats'),
+                API.get('/api/users/alumni') // Fetch real alumni
             ]);
             // Filter for student-alumni mentorship only
             const filteredRequests = reqRes.data.filter(req => {
@@ -134,7 +134,7 @@ const Mentorship = () => {
         if (!newMessage.trim() || !selectedChat) return;
 
         try {
-            const { data } = await axios.post('http://localhost:5000/api/messages', {
+            const { data } = await API.post('/api/messages', {
                 receiverId: selectedChat.id,
                 content: newMessage
             });
@@ -158,7 +158,7 @@ const Mentorship = () => {
     const handleSendRequest = async (e) => {
         e.preventDefault();
         try {
-            const { data } = await axios.post('http://localhost:5000/api/mentorship/request', {
+            const { data } = await API.post('/api/mentorship/request', {
                 mentorId: selectedMentorForRequest.id,
                 topic: requestData.topic,
                 message: requestData.message
@@ -167,7 +167,7 @@ const Mentorship = () => {
             setShowRequestModal(false);
             setRequestData({ topic: '', message: '' });
             // Refresh requests
-            const reqRes = await axios.get('http://localhost:5000/api/mentorship/requests');
+            const reqRes = await API.get('/api/mentorship/requests');
             setRequests(reqRes.data);
         } catch (error) {
             alert(error.response?.data?.message || 'Failed to send request');
@@ -340,7 +340,7 @@ const Mentorship = () => {
                                                             const formData = new FormData();
                                                             formData.append('receiverId', selectedChat.id);
                                                             formData.append('image', file);
-                                                            axios.post('http://localhost:5000/api/messages', formData)
+                                                            API.post('/api/messages', formData)
                                                                 .then(({data}) => {
                                                                     setMessages([...messages, data]);
                                                                     scrollToBottom();

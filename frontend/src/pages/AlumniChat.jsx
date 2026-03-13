@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
+import API from '../api/axios';
 import { 
     MessageSquare, 
     Check, 
@@ -35,8 +35,8 @@ const AlumniChat = () => {
         setLoading(true);
         try {
             const [reqRes, chatRes] = await Promise.all([
-                axios.get('http://localhost:5000/api/mentorship/requests'),
-                axios.get('http://localhost:5000/api/messages/chats')
+                API.get('/api/mentorship/requests'),
+                API.get('/api/messages/chats')
             ]);
 
             // Filter for alumni-to-alumni only
@@ -90,7 +90,7 @@ const AlumniChat = () => {
         if (!newMessage.trim() || !selectedChat) return;
 
         try {
-            const { data } = await axios.post('http://localhost:5000/api/messages', {
+            const { data } = await API.post('/api/messages', {
                 receiverId: selectedChat.id,
                 content: newMessage
             });
@@ -253,7 +253,7 @@ const AlumniChat = () => {
                                                             const formData = new FormData();
                                                             formData.append('receiverId', selectedChat.id);
                                                             formData.append('image', file);
-                                                            axios.post('http://localhost:5000/api/messages', formData)
+                                                            API.post('/api/messages', formData)
                                                                 .then(({data}) => {
                                                                     setMessages([...messages, data]);
                                                                     scrollToBottom();
