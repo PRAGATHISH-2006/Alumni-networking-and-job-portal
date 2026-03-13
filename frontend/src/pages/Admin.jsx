@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from 'react';
-<<<<<<< HEAD
 import API from '../api/axios';
-=======
-import axios from 'axios';
->>>>>>> c1c6cd0974127645dd41ee07bb95326593fd51e6
 import { 
     LayoutDashboard, 
     Users, 
@@ -63,11 +59,7 @@ const Admin = () => {
         setLoading(true);
         setError(null);
         try {
-<<<<<<< HEAD
             const statsRes = await API.get('/api/admin/stats');
-=======
-            const statsRes = await axios.get('http://localhost:5000/api/admin/stats');
->>>>>>> c1c6cd0974127645dd41ee07bb95326593fd51e6
             setStats(statsRes.data);
             loadTabData(activeTab);
         } catch (err) {
@@ -93,7 +85,7 @@ const Admin = () => {
         }
 
         try {
-            const res = await axios.get(`http://localhost:5000/api/admin/${endpoint}`);
+            const res = await API.get('/api/admin/${endpoint}');
             setData(res.data);
         } catch (error) {
             console.error(`Error loading ${tab}:`, error);
@@ -114,9 +106,9 @@ const Admin = () => {
             const successMsg = isData ? maybeMsg : dataOrMsg;
 
             if (method === 'post' || method === 'put' || method === 'patch') {
-                await axios[method](`http://localhost:5000/api/admin/${endpoint}`, data);
+                await API[method]('/api/admin/${endpoint}', data);
             } else {
-                await axios[method](`http://localhost:5000/api/admin/${endpoint}`);
+                await API[method]('/api/admin/${endpoint}');
             }
             fetchData();
             if (successMsg) console.log(successMsg);
@@ -672,7 +664,7 @@ const Admin = () => {
                                                         const formData = new FormData(e.target);
                                                         const update = Object.fromEntries(formData);
                                                         try {
-                                                            await axios.patch(`http://localhost:5000/api/jobs/${viewingApplicants.job.id}/manage/${app.id}`, update);
+                                                            await API.patch('/api/jobs/${viewingApplicants.job.id}/manage/${app.id}', update);
                                                             // Update local state
                                                             const updatedApplicants = viewingApplicants.applicants.map(a => 
                                                                 a.id === app.id ? { ...a, JobApplicants: { ...a.JobApplicants, ...update } } : a
@@ -944,7 +936,7 @@ const renderCustomActions = (tab, item, handleAction, setEditingItem, setShowRep
                 <>
                     <button className="btn-icon success" onClick={async () => {
                         try {
-                            const res = await axios.get(`http://localhost:5000/api/jobs/${item.id}/applicants`);
+                            const res = await API.get('/api/jobs/${item.id}/applicants');
                             setViewingApplicants({ job: item, applicants: res.data });
                         } catch (err) {
                             console.error(err);

@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from 'react';
-<<<<<<< HEAD
 import API from '../api/axios';
-=======
-import axios from 'axios';
->>>>>>> c1c6cd0974127645dd41ee07bb95326593fd51e6
 import { useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
@@ -79,7 +75,7 @@ const Profile = () => {
             } else {
                 setPageLoading(true);
                 try {
-                    const { data } = await axios.get(`http://localhost:5000/api/users/${userId}`);
+                    const { data } = await API.get('/api/users/${userId}');
                     setViewedUser(data);
                 } catch (error) {
                     console.error('Error fetching profile', error);
@@ -171,11 +167,7 @@ const Profile = () => {
     const handleSendRequest = async (e) => {
         e.preventDefault();
         try {
-<<<<<<< HEAD
             await API.post('/api/mentorship/request', {
-=======
-            await axios.post('http://localhost:5000/api/mentorship/request', {
->>>>>>> c1c6cd0974127645dd41ee07bb95326593fd51e6
                 mentorId: viewedUser.id,
                 topic: requestData.topic,
                 message: requestData.message

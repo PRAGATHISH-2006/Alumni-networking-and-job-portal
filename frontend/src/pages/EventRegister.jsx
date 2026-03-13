@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-<<<<<<< HEAD
 import API from '../api/axios';
-=======
-import axios from 'axios';
->>>>>>> c1c6cd0974127645dd41ee07bb95326593fd51e6
 import { motion, AnimatePresence } from 'framer-motion';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
@@ -52,7 +48,7 @@ const EventRegister = () => {
     useEffect(() => {
         const fetchEvent = async () => {
             try {
-                const res = await axios.get(`http://localhost:5000/api/events/id/${id}`, { withCredentials: true });
+                const res = await API.get('/api/events/id/${id}', { withCredentials: true });
                 setEvent(res.data);
                 
                 // Check if already registered
@@ -116,7 +112,7 @@ const EventRegister = () => {
         setIsSubmitting(true);
         try {
             // Attempt to register in backend if id is a UUID (database event)
-            await axios.post(`http://localhost:5000/api/events/register/${id}`, formData, { withCredentials: true });
+            await API.post('/api/events/register/${id}', formData, { withCredentials: true });
             
             setIsSubmitting(false);
             setIsConfirmed(true);
