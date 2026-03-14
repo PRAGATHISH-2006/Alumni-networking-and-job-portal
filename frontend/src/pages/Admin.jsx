@@ -86,7 +86,7 @@ const Admin = () => {
         }
 
         try {
-            const res = await API.get('/api/admin/${endpoint}');
+            const res = await API.get(`/api/admin/${endpoint}`);
             setData(res.data);
         } catch (error) {
             console.error(`Error loading ${tab}:`, error);
@@ -107,9 +107,9 @@ const Admin = () => {
             const successMsg = isData ? maybeMsg : dataOrMsg;
 
             if (method === 'post' || method === 'put' || method === 'patch') {
-                await API[method]('/api/admin/${endpoint}', data);
+                await API[method](`/api/admin/${endpoint}`, data);
             } else {
-                await API[method]('/api/admin/${endpoint}');
+                await API[method](`/api/admin/${endpoint}`);
             }
             fetchData();
             if (successMsg) console.log(successMsg);
