@@ -63,7 +63,12 @@ if (process.env.NODE_ENV !== 'production') {
 } else {
     // Just authenticate in production
     sequelize.authenticate()
-        .then(() => console.log('PostgreSQL Connected'))
+        .then(() => {
+            console.log('PostgreSQL Connected');
+            app.listen(PORT, () => {
+                console.log(`Server running on port ${PORT} (Production)`);
+            });
+        })
         .catch(err => console.error('DB Connection Error:', err));
 }
 

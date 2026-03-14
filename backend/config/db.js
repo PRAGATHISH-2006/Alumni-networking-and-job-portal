@@ -1,8 +1,10 @@
 const { Sequelize } = require('sequelize');
 require('dotenv').config();
 
-const sequelize = process.env.POSTGRES_URL 
-    ? new Sequelize(process.env.POSTGRES_URL, {
+const connectionString = process.env.POSTGRES_URL || process.env.DATABASE_URL;
+
+const sequelize = connectionString 
+    ? new Sequelize(connectionString, {
         dialect: 'postgres',
         dialectOptions: {
             ssl: {

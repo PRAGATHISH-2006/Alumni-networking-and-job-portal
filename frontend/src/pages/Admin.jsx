@@ -637,7 +637,7 @@ const Admin = () => {
                                                 <td>
                                                     <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                                                         {app.JobApplicants.resumePath ? (
-                                                            <a href={`http://localhost:5000/${app.JobApplicants.resumePath}`} target="_blank" rel="noopener noreferrer" className="badge-alert" style={{ background: 'rgba(59, 130, 246, 0.1)', color: '#3b82f6', textDecoration: 'none', padding: '2px 8px', borderRadius: '4px' }}>
+                                                            <a href={`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/${app.JobApplicants.resumePath}`} target="_blank" rel="noopener noreferrer" className="badge-alert" style={{ background: 'rgba(59, 130, 246, 0.1)', color: '#3b82f6', textDecoration: 'none', padding: '2px 8px', borderRadius: '4px' }}>
                                                                 View Resume
                                                             </a>
                                                         ) : <span className="text-muted">No Resume</span>}

@@ -229,7 +229,7 @@ const AlumniChat = () => {
                                                         <div key={idx} className={`message-bubble ${m.senderId === user.id ? 'sent' : 'received'}`}>
                                                             {m.imageUrl && (
                                                                 <div className="chat-image-container">
-                                                                    <img src={`http://localhost:5000${m.imageUrl}`} alt="Shared" className="chat-img" />
+                                                                    <img src={`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${m.imageUrl}`} alt="Shared" className="chat-img" />
                                                                 </div>
                                                             )}
                                                             {m.content && <p className="msg-text">{m.content}</p>}
