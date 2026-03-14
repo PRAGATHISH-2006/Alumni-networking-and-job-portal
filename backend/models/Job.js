@@ -34,6 +34,8 @@ const Job = sequelize.define('Job', {
         type: DataTypes.BOOLEAN,
         defaultValue: false
     }
+}, {
+    tableName: 'Job'
 });
 
 module.exports = Job;

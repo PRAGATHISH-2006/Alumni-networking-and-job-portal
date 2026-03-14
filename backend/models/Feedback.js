@@ -30,6 +30,8 @@ const Feedback = sequelize.define('Feedback', {
     adminResponse: {
         type: DataTypes.TEXT
     }
+}, {
+    tableName: 'Feedback'
 });
 
 module.exports = Feedback;

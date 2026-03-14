@@ -351,7 +351,8 @@ exports.createJob = async (req, res) => {
         const job = await Job.create({ ...req.body, postedBy: req.user.id });
         res.status(201).json(job);
     } catch (error) {
-        res.status(500).json({ message: 'Error creating job' });
+        console.error('Job Creation Error:', error);
+        res.status(500).json({ message: `Error creating job: ${error.message}` });
     }
 };
 

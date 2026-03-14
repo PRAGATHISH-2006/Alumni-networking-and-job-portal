@@ -34,6 +34,8 @@ const Event = sequelize.define('Event', {
         type: DataTypes.FLOAT,
         defaultValue: 0
     }
+}, {
+    tableName: 'Event'
 });
 
 module.exports = Event;

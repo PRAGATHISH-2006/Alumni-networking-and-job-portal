@@ -17,6 +17,8 @@ const Mentorship = sequelize.define('Mentorship', {
     topic: {
         type: DataTypes.STRING
     }
+}, {
+    tableName: 'Mentorship'
 });
 
 module.exports = Mentorship;
