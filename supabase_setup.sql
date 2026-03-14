@@ -192,5 +192,5 @@ CREATE TABLE IF NOT EXISTS "Feedbacks" (
 
 -- 3. Initial Admin User (Password is 'admin123')
 INSERT INTO "Users" ("id", "name", "email", "password", "role", "isApproved")
-VALUES ('0a4f552b-40d1-a0bf-6105-f48e6540ce81', 'System Admin', 'admin@college.edu', '$2a$12$L7pY.G9R.k8R8.X8X8X8X8X8X8X8X8X8X8X8X8X8X8X8X8X8X8X8S', 'admin', true)
+VALUES ('0a4f552b-40d1-a0bf-6105-f48e6540ce81', 'System Admin', 'admin@college.edu', '$2b$12$cb3TOsEG.ZxpW6jXrXK7UeSmIjj9ljLkVFXVt.uEjlOzsaCgDDUvBW', 'admin', true)
 ON CONFLICT (email) DO NOTHING;
