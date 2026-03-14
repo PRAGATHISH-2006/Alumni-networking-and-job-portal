@@ -35,7 +35,7 @@ const Event = sequelize.define('Event', {
         defaultValue: 0
     }
 }, {
-    tableName: 'Event'
+    tableName: 'Events'
 });
 
 module.exports = Event;

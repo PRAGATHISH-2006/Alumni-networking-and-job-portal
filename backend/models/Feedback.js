@@ -31,7 +31,7 @@ const Feedback = sequelize.define('Feedback', {
         type: DataTypes.TEXT
     }
 }, {
-    tableName: 'Feedback'
+    tableName: 'Feedbacks'
 });
 
 module.exports = Feedback;

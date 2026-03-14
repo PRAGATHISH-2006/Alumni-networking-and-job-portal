@@ -32,7 +32,7 @@ const Donation = sequelize.define('Donation', {
         unique: true
     }
 }, {
-    tableName: 'Donation'
+    tableName: 'Donations'
 });
 
 module.exports = Donation;

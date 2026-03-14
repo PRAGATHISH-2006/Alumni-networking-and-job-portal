@@ -35,7 +35,7 @@ const Job = sequelize.define('Job', {
         defaultValue: false
     }
 }, {
-    tableName: 'Job'
+    tableName: 'Jobs'
 });
 
 module.exports = Job;

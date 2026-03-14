@@ -18,7 +18,7 @@ const Mentorship = sequelize.define('Mentorship', {
         type: DataTypes.STRING
     }
 }, {
-    tableName: 'Mentorship'
+    tableName: 'Mentorships'
 });
 
 module.exports = Mentorship;

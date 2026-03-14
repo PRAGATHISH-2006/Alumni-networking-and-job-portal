@@ -34,7 +34,7 @@ const Story = sequelize.define('Story', {
         defaultValue: false
     }
 }, {
-    tableName: 'Story'
+    tableName: 'Stories'
 });
 
 module.exports = Story;
