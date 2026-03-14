@@ -69,7 +69,7 @@ const AlumniChat = () => {
     const fetchMessages = async (partnerId) => {
         setMsgLoading(true);
         try {
-            const { data } = await API.get('/api/messages/${partnerId}');
+            const { data } = await API.get(`/api/messages/${partnerId}`);
             setMessages(data);
             scrollToBottom();
         } catch (error) {
@@ -104,7 +104,7 @@ const AlumniChat = () => {
 
     const handleStatusUpdate = async (id, status) => {
         try {
-            await API.put('/api/mentorship/${id}', { status });
+            await API.put(`/api/mentorship/${id}`, { status });
             fetchData();
         } catch (error) {
             console.error(error);

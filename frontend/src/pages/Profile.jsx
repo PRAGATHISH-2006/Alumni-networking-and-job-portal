@@ -75,7 +75,7 @@ const Profile = () => {
             } else {
                 setPageLoading(true);
                 try {
-                    const { data } = await API.get('/api/users/${userId}');
+                    const { data } = await API.get(`/api/users/${userId}`);
                     setViewedUser(data);
                 } catch (error) {
                     console.error('Error fetching profile', error);

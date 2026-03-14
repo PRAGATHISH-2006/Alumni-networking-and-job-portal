@@ -48,7 +48,7 @@ const EventRegister = () => {
     useEffect(() => {
         const fetchEvent = async () => {
             try {
-                const res = await API.get('/api/events/id/${id}', { withCredentials: true });
+                const res = await API.get(`/api/events/id/${id}`, { withCredentials: true });
                 setEvent(res.data);
                 
                 // Check if already registered
@@ -112,7 +112,7 @@ const EventRegister = () => {
         setIsSubmitting(true);
         try {
             // Attempt to register in backend if id is a UUID (database event)
-            await API.post('/api/events/register/${id}', formData, { withCredentials: true });
+            await API.post(`/api/events/register/${id}`, formData, { withCredentials: true });
             
             setIsSubmitting(false);
             setIsConfirmed(true);

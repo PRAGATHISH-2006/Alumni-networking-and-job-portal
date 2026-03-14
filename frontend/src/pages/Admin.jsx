@@ -665,7 +665,7 @@ const Admin = () => {
                                                         const formData = new FormData(e.target);
                                                         const update = Object.fromEntries(formData);
                                                         try {
-                                                            await API.patch('/api/jobs/${viewingApplicants.job.id}/manage/${app.id}', update);
+                                                            await API.patch(`/api/jobs/${viewingApplicants.job.id}/manage/${app.id}`, update);
                                                             // Update local state
                                                             const updatedApplicants = viewingApplicants.applicants.map(a => 
                                                                 a.id === app.id ? { ...a, JobApplicants: { ...a.JobApplicants, ...update } } : a
@@ -937,7 +937,7 @@ const renderCustomActions = (tab, item, handleAction, setEditingItem, setShowRep
                 <>
                     <button className="btn-icon success" onClick={async () => {
                         try {
-                            const res = await API.get('/api/jobs/${item.id}/applicants');
+                            const res = await API.get(`/api/jobs/${item.id}/applicants`);
                             setViewingApplicants({ job: item, applicants: res.data });
                         } catch (err) {
                             console.error(err);
