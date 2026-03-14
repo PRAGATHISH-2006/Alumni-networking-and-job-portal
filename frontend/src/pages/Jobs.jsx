@@ -97,7 +97,7 @@ const Jobs = () => {
         const formData = new FormData(e.target);
         
         try {
-            await API.post('/api/jobs/${selectedJob.id}/apply', formData, {
+            await API.post(`/api/jobs/${selectedJob.id}/apply`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
             setShowApplyModal(false);
