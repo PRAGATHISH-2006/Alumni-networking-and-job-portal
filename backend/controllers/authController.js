@@ -8,8 +8,8 @@ const generateToken = (res, id) => {
 
     res.cookie('token', token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV !== 'development',
-        sameSite: 'strict',
+        secure: true, // MUST be true for cross-site cookies
+        sameSite: 'none', // Allow Vercel (frontend) to send cookies to Render (backend)
         maxAge: 30 * 24 * 60 * 60 * 1000
     });
 
@@ -96,6 +96,8 @@ exports.loginUser = async (req, res) => {
 exports.logoutUser = (req, res) => {
     res.cookie('token', '', {
         httpOnly: true,
+        secure: true,
+        sameSite: 'none',
         expires: new Date(0)
     });
     res.status(200).json({ message: 'Logged out' });

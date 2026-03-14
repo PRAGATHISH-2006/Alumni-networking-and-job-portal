@@ -64,7 +64,8 @@ const Admin = () => {
             loadTabData(activeTab);
         } catch (err) {
             console.error('Fetch error:', err);
-            setError('Failed to fetch dashboard data. Please check your connection.');
+            const serverMsg = err.response?.data?.message || err.message || '';
+            setError(`Failed to fetch dashboard data. ${serverMsg}`);
         } finally {
             setLoading(false);
         }
