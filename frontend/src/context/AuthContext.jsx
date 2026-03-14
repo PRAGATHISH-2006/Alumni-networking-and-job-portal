@@ -13,6 +13,7 @@ export const AuthProvider = ({ children }) => {
                 const { data } = await API.get('/api/auth/profile');
                 setUser(data);
             } catch (error) {
+                localStorage.removeItem('token'); // Clear it if invalid
                 setUser(null);
             }
             setLoading(false);
@@ -22,18 +23,21 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (email, password) => {
         const { data } = await API.post('/api/auth/login', { email, password });
+        if (data.token) localStorage.setItem('token', data.token);
         setUser(data);
         return data;
     };
 
     const register = async (userData) => {
         const { data } = await API.post('/api/auth/register', userData);
+        if (data.token) localStorage.setItem('token', data.token);
         setUser(data);
         return data;
     };
 
     const logout = async () => {
         await API.post('/api/auth/logout');
+        localStorage.removeItem('token');
         setUser(null);
     };
 
