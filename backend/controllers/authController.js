@@ -54,7 +54,8 @@ exports.registerUser = async (req, res) => {
         }
     } catch (error) {
         console.error('Registration Error:', error);
-        res.status(500).json({ message: 'Server error', error: error.message });
+        // Include the actual error message so the frontend can see why it failed
+        res.status(500).json({ message: `Server error: ${error.message}` });
     }
 };
 
@@ -87,7 +88,8 @@ exports.loginUser = async (req, res) => {
         }
     } catch (error) {
         console.error('Login Error:', error);
-        res.status(500).json({ message: 'Server error' });
+        // Include the actual error message so the frontend can see why it failed (e.g., "secretOrPrivateKey must have a value")
+        res.status(500).json({ message: `Server error: ${error.message}` });
     }
 };
 
