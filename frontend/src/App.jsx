@@ -26,6 +26,8 @@ import CoursePlayer from './pages/CoursePlayer';
 import EventRegister from './pages/EventRegister';
 import Profile from './pages/Profile';
 import AlumniChat from './pages/AlumniChat';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { AnimatePresence } from 'framer-motion';
 
@@ -43,7 +45,10 @@ function AppContent() {
   const { user, loading } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
-  const isAuthPath = location.pathname === '/login' || location.pathname === '/register';
+  const isAuthPath = location.pathname === '/login' || 
+                     location.pathname === '/register' || 
+                     location.pathname === '/forgot-password' || 
+                     location.pathname.startsWith('/reset-password/');
   const isAdminPath = location.pathname.startsWith('/admin');
   const [showSplash, setShowSplash] = React.useState(true);
   const [splashDone, setSplashDone] = React.useState(false);
@@ -83,8 +88,10 @@ function AppContent() {
         {!hideSidebar && <Sidebar />}
         <main className={`content-area ${hideSidebar ? 'full-width' : ''} ${isAuthPath ? 'auth-page-wrapper' : ''}`}>
           <Routes>
-            <Route path="/login" element={<Login />} />
+            <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
             <Route path="/register" element={!user ? <Register /> : <Navigate to="/" />} />
+            <Route path="/forgot-password" element={!user ? <ForgotPassword /> : <Navigate to="/" />} />
+            <Route path="/reset-password/:token" element={!user ? <ResetPassword /> : <Navigate to="/" />} />
             
             <Route path="/" element={user ? <Home /> : <Navigate to="/login" />} />
             

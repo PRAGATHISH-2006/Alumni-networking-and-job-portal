@@ -12,10 +12,9 @@ import {
     ArrowRight, 
     ArrowLeft, 
     GraduationCap, 
-    ShieldCheck,
-    Code,
-    Building,
-    MapPin
+    MapPin,
+    Eye,
+    EyeOff
 } from 'lucide-react';
 import './Auth.css';
 
@@ -35,6 +34,7 @@ const Register = () => {
     });
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
     const { register } = useAuth();
     const navigate = useNavigate();
 
@@ -123,7 +123,23 @@ const Register = () => {
                                 </div>
                                 <div className="input-group">
                                     <label><Lock size={18} /> Password</label>
-                                    <input name="password" type="password" value={formData.password} onChange={handleChange} required placeholder="••••••••" />
+                                <div className="password-input-wrapper">
+                                        <input 
+                                            name="password" 
+                                            type={showPassword ? "text" : "password"} 
+                                            value={formData.password} 
+                                            onChange={handleChange} 
+                                            required 
+                                            placeholder="••••••••" 
+                                        />
+                                        <button 
+                                            type="button" 
+                                            className="password-toggle" 
+                                            onClick={() => setShowPassword(!showPassword)}
+                                        >
+                                            {showPassword ? <Eye size={18} /> : <EyeOff size={18} />}
+                                        </button>
+                                    </div>
                                 </div>
                                 <div className="input-group">
                                     <label><ShieldCheck size={18} /> Account Type</label>

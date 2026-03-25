@@ -239,6 +239,16 @@ exports.getAllDonations = async (req, res) => {
     }
 };
 
+exports.resetDonations = async (req, res) => {
+    try {
+        await Donation.destroy({ where: {}, truncate: true });
+        res.json({ message: 'All donation records have been reset' });
+    } catch (error) {
+        console.error('Reset Donations Error:', error);
+        res.status(500).json({ message: 'Failed to reset donations' });
+    }
+};
+
 exports.getAllFeedback = async (req, res) => {
     try {
         const feedbacks = await Feedback.findAll({ order: [['createdAt', 'DESC']] });

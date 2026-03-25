@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { LogIn, Mail, Lock, Loader } from 'lucide-react';
+import { LogIn, Mail, Lock, Loader, Eye, EyeOff } from 'lucide-react';
 import { motion } from 'framer-motion';
 import './Auth.css';
 
@@ -10,6 +10,7 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
     const { login } = useAuth();
     const navigate = useNavigate();
 
@@ -74,13 +75,25 @@ const Login = () => {
                         </div>
                         <div className="input-group">
                             <label><Lock size={18} /> Password</label>
-                            <input
-                                type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                                placeholder="••••••••"
-                            />
+                            <div className="password-input-wrapper">
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required
+                                    placeholder="••••••••"
+                                />
+                                <button 
+                                    type="button" 
+                                    className="password-toggle" 
+                                    onClick={() => setShowPassword(!showPassword)}
+                                >
+                                    {showPassword ? <Eye size={18} /> : <EyeOff size={18} />}
+                                </button>
+                            </div>
+                        </div>
+                        <div className="auth-options" style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1.5rem', marginTop: '-0.5rem' }}>
+                            <Link to="/forgot-password" style={{ fontSize: '0.85rem', color: 'var(--primary)', fontWeight: 500 }}>Forgot Password?</Link>
                         </div>
                         <button type="submit" className="btn btn-primary auth-btn" disabled={isLoading}>
                             {isLoading ? <Loader className="spin" size={20} /> : 'Login'}

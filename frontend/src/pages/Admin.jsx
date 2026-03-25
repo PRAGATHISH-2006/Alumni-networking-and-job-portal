@@ -360,6 +360,19 @@ const Admin = () => {
                                             <Trophy size={14} /> Create Story
                                         </button>
                                     )}
+                                    {activeTab === 'donations' && (
+                                        <button 
+                                            className="btn btn-primary btn-sm danger" 
+                                            onClick={() => {
+                                                if (window.confirm('Are you sure you want to PERMANENTLY reset all donation records? This cannot be undone.')) {
+                                                    handleAction('delete', 'donations', 'Donations reset successfully');
+                                                }
+                                            }} 
+                                            style={{ display: 'flex', alignItems: 'center', gap: '5px', padding: '0.4rem 0.8rem', fontSize: '0.8rem', background: '#ef4444' }}
+                                        >
+                                            <RefreshCw size={14} /> Reset All Donations
+                                        </button>
+                                    )}
                                     <span className="badge-alert" style={{ background: 'rgba(59, 130, 246, 0.1)', color: '#3b82f6', borderRadius: '8px', padding: '5px 12px' }}>
                                         {filteredData.length} records found
                                     </span>

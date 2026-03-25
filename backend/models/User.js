@@ -101,6 +101,14 @@ const User = sequelize.define('User', {
     isApproved: {
         type: DataTypes.BOOLEAN,
         defaultValue: false
+    },
+    resetPasswordToken: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    resetPasswordExpire: {
+        type: DataTypes.DATE,
+        allowNull: true
     }
 }, {
     hooks: {
