@@ -10,7 +10,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 2rem 0.75rem;
+    padding: var(--space-sm);
     border-right: 1px solid var(--glass-border);
     z-index: 900;
 }
@@ -81,10 +81,10 @@
 .sidebar-logout:hover {
     background: #f43f5e;
     color: white;
-    box-shadow: 0 4px 15px rgba(244, 63, 94, 0.3);
+    box-shadow: 0 0.25rem 0.9375rem rgba(244, 63, 94, 0.3); /* 4px / 16px = 0.25rem, 15px / 16px = 0.9375rem */
 }
 
-@media (max-width: 768px) {
+@media (max-width: 61.9375rem) { /* 991px / 16px = 61.9375rem */
     .sidebar {
         display: none;
     }

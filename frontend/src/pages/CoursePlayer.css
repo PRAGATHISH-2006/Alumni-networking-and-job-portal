@@ -11,7 +11,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1rem 3rem;
+    padding: var(--space-sm) var(--space-md);
     background: var(--surface);
     border-bottom: 1px solid var(--glass-border);
 }
@@ -59,7 +59,7 @@
 
 .main-content {
     flex: 1;
-    padding: 3rem;
+    padding: var(--space-md);
     overflow-y: auto;
     display: flex;
     flex-direction: column;
@@ -68,7 +68,7 @@
 
 .video-area {
     width: 100%;
-    max-width: 1000px;
+    max-width: 62.5rem; /* ~1000px but relative */
 }
 
 .video-placeholder {
@@ -116,8 +116,8 @@
 /* Quiz Styles */
 .quiz-area {
     width: 100%;
-    max-width: 800px;
-    padding: 4rem;
+    max-width: 50rem; /* ~800px but relative */
+    padding: var(--space-md);
 }
 
 .quiz-header {
@@ -142,7 +142,7 @@
 
 .options-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
     gap: 1.25rem;
 }
 
@@ -177,7 +177,7 @@
 /* Certificate Styles */
 .certificate-area {
     width: 100%;
-    max-width: 900px;
+    max-width: 56.25rem; /* ~900px but relative */
     text-align: center;
 }
 
@@ -261,10 +261,10 @@
 
 /* Sidebar Styles */
 .player-sidebar {
-    width: 350px;
+    width: 22rem; /* ~352px but relative */
     border-radius: 0;
     border-left: 1px solid var(--glass-border);
-    padding: 2.5rem;
+    padding: var(--space-sm);
     background: rgba(15, 23, 42, 0.9);
 }
 
@@ -316,4 +316,47 @@
 .lesson-info .l-dur {
     font-size: 0.75rem;
     opacity: 0.6;
+}
+
+@media (max-width: 991px) {
+    .course-player-page {
+        height: auto;
+    }
+
+    .player-container {
+        flex-direction: column;
+        overflow: visible;
+    }
+
+    .player-sidebar {
+        width: 100%;
+        border-left: none;
+        border-top: 1px solid var(--glass-border);
+    }
+}
+
+@media (max-width: 576px) {
+    .player-navbar {
+        padding: var(--space-sm);
+    }
+
+    .back-btn span {
+        display: none;
+    }
+
+    .quiz-area {
+        padding: var(--space-sm);
+    }
+
+    .cert-inner {
+        padding: var(--space-md) var(--space-sm);
+    }
+
+    .user-name-highlight {
+        font-size: var(--fs-h2);
+    }
+
+    .cert-inner h1 {
+        font-size: var(--fs-h2);
+    }
 }

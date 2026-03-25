@@ -7,6 +7,7 @@
     align-items: center;
     position: fixed;
     top: 0;
+    left: 0;
     width: 100%;
     z-index: 1000;
     color: white;
@@ -14,9 +15,10 @@
 }
 
 .nav-container {
-    width: 95%;
+    width: 100%;
     max-width: 1400px;
     margin: 0 auto;
+    padding: 0 var(--space-md);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -226,7 +228,7 @@
     cursor: pointer;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 991px) {
     .mobile-toggle {
         display: block;
         z-index: 1001;
@@ -236,7 +238,7 @@
         position: fixed;
         top: 0;
         right: -100%;
-        width: 80%;
+        width: 85%;
         max-width: 400px;
         height: 100vh;
         background: #0f172a;
@@ -245,7 +247,7 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        padding: 4rem 2rem;
+        padding: var(--space-xl) var(--space-md);
         transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         z-index: 1000;
         box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
@@ -258,7 +260,7 @@
     .nav-list {
         flex-direction: column;
         width: 100%;
-        gap: 0.5rem;
+        gap: var(--space-xs);
     }
 
     .nav-item {
@@ -267,9 +269,9 @@
     }
 
     .nav-link {
-        padding: 1.2rem;
+        padding: var(--space-sm);
         justify-content: center;
-        font-size: 1.1rem;
+        font-size: 1.125rem;
     }
 
     .dropdown-menu {
@@ -294,18 +296,14 @@
 
     .nav-auth-info {
         flex-direction: column;
-        gap: 1.5rem;
-        margin-top: 2rem;
+        gap: var(--space-sm);
+        margin-top: var(--space-md);
         width: 100%;
     }
 
-    .user-profile-link {
+    .user-profile-link, .logout-btn {
         width: 100%;
-        justify-content: center;
-    }
-
-    .logout-btn {
-        width: 100%;
+        max-width: 300px;
         justify-content: center;
     }
 }

@@ -177,9 +177,9 @@
 }
 
 .auth-card {
-    max-width: 500px;
+    max-width: 35rem; /* ~560px but relative */
     width: 100%;
-    padding: 2rem;
+    padding: var(--space-md);
 }
 
 .auth-header {
@@ -194,15 +194,15 @@
 }
 
 .auth-header h2 {
-    font-size: clamp(1.5rem, 6vw, 2.5rem);
+    font-size: var(--fs-h2);
     font-weight: 800;
-    margin-bottom: 0.75rem;
+    margin-bottom: var(--space-xs);
     letter-spacing: -0.03em;
 }
 
 .auth-header p {
     color: var(--text-muted);
-    font-size: 0.9rem;
+    font-size: var(--fs-base);
 }
 
 .auth-form {
