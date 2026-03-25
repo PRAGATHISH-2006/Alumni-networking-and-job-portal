@@ -1,7 +1,9 @@
 .support-page {
-    padding: 2rem 0;
-    max-width: 1000px;
+    padding: var(--space-md) var(--space-sm);
+    max-width: var(--max-width-lg);
     margin: 0 auto;
+    text-align: center;
+    margin-bottom: 4rem;
 }
 
 .support-header {
@@ -30,8 +32,8 @@
 }
 
 .support-icon {
-    width: 60px;
-    height: 60px;
+    width: clamp(40px, 8vw, 60px);
+    height: clamp(40px, 8vw, 60px);
     background: var(--grad-primary);
     border-radius: 16px;
     display: flex;

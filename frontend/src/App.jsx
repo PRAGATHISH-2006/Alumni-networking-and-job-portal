@@ -52,6 +52,7 @@ function AppContent() {
   const isAdminPath = location.pathname.startsWith('/admin');
   const [showSplash, setShowSplash] = React.useState(true);
   const [splashDone, setSplashDone] = React.useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
 
   const handleSplashFinish = () => {
     setShowSplash(false);
@@ -83,9 +84,14 @@ function AppContent() {
 
   return (
     <div className="layout-root">
-      {!isAuthPath && <Navbar />}
+      {!isAuthPath && <Navbar toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />}
       <div className={`main-wrapper${isAuthPath ? ' auth-wrapper' : ''}`}>
-        {!hideSidebar && <Sidebar />}
+        {!hideSidebar && (
+          <Sidebar 
+            isOpen={isSidebarOpen} 
+            onClose={() => setIsSidebarOpen(false)} 
+          />
+        )}
         <main className={`content-area ${hideSidebar ? 'full-width' : ''} ${isAuthPath ? 'auth-page-wrapper' : ''}`}>
           <Routes>
             <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />

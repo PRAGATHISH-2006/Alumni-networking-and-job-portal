@@ -3,10 +3,10 @@
 }
 
 .profile-header-banner {
-    height: 250px;
-    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+    height: clamp(200px, 20vw, 300px);
+    background: var(--grad-primary);
     position: relative;
-    border-radius: 0 0 40px 40px;
+    border-radius: 0 0 clamp(20px, 4vw, 40px) clamp(20px, 4vw, 40px);
     overflow: hidden;
 }
 
@@ -19,11 +19,19 @@
 
 .profile-content {
     max-width: 1200px;
-    margin: -100px auto 0;
-    padding: 0 2rem;
+    margin: -5rem auto 0;
+    padding: 0 var(--space-sm);
     display: grid;
-    grid-template-columns: 350px 1fr;
-    gap: 2.5rem;
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+    position: relative;
+    z-index: 10;
+}
+
+@media (min-width: 992px) {
+    .profile-content {
+        grid-template-columns: clamp(280px, 30%, 350px) 1fr;
+    }
 }
 
 .profile-sidebar-card {
@@ -36,8 +44,8 @@
 
 .profile-avatar-wrapper {
     position: relative;
-    width: 150px;
-    height: 150px;
+    width: clamp(100px, 15vw, 150px);
+    height: clamp(100px, 15vw, 150px);
     margin: 0 auto 2rem;
 }
 

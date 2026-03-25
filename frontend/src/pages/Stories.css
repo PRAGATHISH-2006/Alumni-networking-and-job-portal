@@ -20,8 +20,8 @@
 
 .stories-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: 2.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(clamp(280px, 100%, 350px), 1fr));
+    gap: var(--space-md);
 }
 
 .story-card {
@@ -45,8 +45,9 @@
 }
 
 .story-avatar {
-    width: 65px;
-    height: 65px;
+    width: clamp(50px, 10vw, 65px);
+    height: clamp(50px, 10vw, 65px);
+    margin-right: var(--space-sm);
     background: var(--grad-primary);
     border-radius: 18px;
     display: flex;

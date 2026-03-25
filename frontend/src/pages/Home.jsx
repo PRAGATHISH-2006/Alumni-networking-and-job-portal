@@ -18,7 +18,8 @@ const Home = () => {
 
     return (
         <div className="home-page">
-            <section className="hero">
+            <div className="container">
+                <section className="hero-section">
                 <div className="container">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -38,16 +39,19 @@ const Home = () => {
                     <div className="blob blur-1"></div>
                     <div className="blob blur-2"></div>
                 </div>
-            </section>
+                </section>
+            </div>
 
-            <section className="features container">
+            <div className="container">
+                <section className="features-section">
                 <div className="feature-grid">
                     <FeatureCard icon={<Users size={32} />} title="Alumni Directory" desc="Find and connect with graduates across different fields." />
                     <FeatureCard icon={<Briefcase size={32} />} title="Job Portal" desc="Exclusive job listings posted by alumni and partners." />
                     <FeatureCard icon={<Calendar size={32} />} title="Events" desc="Stay updated with webinars, meetups, and conferences." />
                     <FeatureCard icon={<Award size={32} />} title="Mentorship" desc="Get career guidance from experienced professionals." />
                 </div>
-            </section>
+                </section>
+            </div>
         </div>
     );
 };

@@ -211,7 +211,7 @@ const Profile = () => {
                 </div>
             </div>
 
-            <div className="profile-content">
+            <div className="profile-content container">
                 <div className="profile-sidebar-card glass-card">
                     <div className="profile-avatar-wrapper">
                         <div className="avatar-placeholder gradient-bg">

@@ -64,7 +64,7 @@ const News = () => {
                             className="glass-card news-card"
                         >
                             <div className="news-img-wrapper">
-                                <img src={news.image} alt={news.title} />
+                                <img src={news.image} alt={news.title} loading="lazy" />
                                 <div className="news-category">
                                     <Tag size={12} /> {news.category}
                                 </div>

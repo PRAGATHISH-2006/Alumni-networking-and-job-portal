@@ -85,7 +85,7 @@ const Register = () => {
                 <div className="auth-blob auth-blob-3"></div>
             </div>
             <div className="auth-watermark">
-                <img src="/logo.png" alt="Watermark Logo" />
+                <img src="/logo.png" alt="Watermark Logo" loading="lazy" />
             </div>
             <div className="container">
                 <motion.div 
