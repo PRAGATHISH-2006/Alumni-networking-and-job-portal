@@ -12,6 +12,9 @@ import {
     ArrowRight, 
     ArrowLeft, 
     GraduationCap, 
+    ShieldCheck,
+    Code,
+    Building,
     MapPin,
     Eye,
     EyeOff
