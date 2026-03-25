@@ -9,7 +9,7 @@
     },
     {
       "source": "/((?!api|assets|favicon.ico|vite.svg).*)",
-      "destination": "/index.html"
+      "destination": "/frontend/dist/index.html"
     }
   ]
 }
