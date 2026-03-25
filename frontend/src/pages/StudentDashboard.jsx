@@ -109,7 +109,8 @@ const StudentDashboard = () => {
                             <div className="text-center p-4"><Loader className="spin" /></div>
                         ) : applications.length > 0 ? (
                             <div className="glass-card" style={{ padding: '0', overflow: 'hidden' }}>
-                                <table className="admin-table" style={{ width: '100%', marginBottom: 0 }}>
+                                <div className="table-responsive">
+                                    <table className="admin-table" style={{ width: '100%', marginBottom: 0 }}>
                                     <thead style={{ background: 'rgba(255,255,255,0.02)' }}>
                                         <tr>
                                             <th style={{ padding: '1rem' }}>Job Opportunity</th>
@@ -145,7 +146,8 @@ const StudentDashboard = () => {
                                             </tr>
                                         ))}
                                     </tbody>
-                                </table>
+                                    </table>
+                                </div>
                             </div>
                         ) : (
                             <div className="glass-card text-center" style={{ padding: '2rem' }}>

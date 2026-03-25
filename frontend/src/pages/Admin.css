@@ -98,8 +98,14 @@
 .admin-main {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 2.5rem;
+    padding: 1.5rem; /* Reduced padding for mobile */
     background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.05), transparent);
+}
+
+@media (min-width: 769px) {
+    .admin-main {
+        padding: 2.5rem;
+    }
 }
 
 .admin-topbar {
@@ -143,7 +149,8 @@
 
 .search-wrapper {
     position: relative;
-    width: 400px;
+    width: 100%; /* Flexible width */
+    max-width: 400px;
 }
 
 .search-wrapper input {
@@ -451,14 +458,28 @@
 }
 
 @media (max-width: 768px) {
-    .admin-sidebar {
-        width: 80px;
+    .admin-drawer {
+        width: 240px;
     }
-    .sidebar-link span, .nav-group-label, .sidebar-brand {
-        display: none;
+    
+    .admin-topbar {
+        flex-direction: column;
+        gap: 1.5rem;
+        align-items: stretch;
     }
-    .admin-main {
-        padding: 1.5rem;
+    
+    .topbar-left {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .search-wrapper {
+        max-width: none;
+    }
+    
+    .topbar-actions {
+        width: 100%;
+        justify-content: space-between;
     }
 }
 

@@ -17,14 +17,14 @@
 }
 
 .hero-title {
-    font-size: 4rem;
+    font-size: clamp(2rem, 8vw, 4rem);
     font-weight: 800;
     line-height: 1.1;
     margin-bottom: 1.5rem;
 }
 
 .hero-subtitle {
-    font-size: 1.25rem;
+    font-size: clamp(1rem, 3vw, 1.25rem);
     color: var(--text-muted);
     margin-bottom: 2.5rem;
     line-height: 1.6;
@@ -34,6 +34,7 @@
     display: flex;
     justify-content: center;
     gap: 1.5rem;
+    flex-wrap: wrap;
 }
 
 .hero-bg-blobs {
@@ -96,6 +97,25 @@
 }
 
 @media (max-width: 768px) {
+    .hero {
+        padding: 60px 0;
+    }
+    
+    .hero-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .hero-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        margin-top: 3rem;
+    }
     .hero-title {
         font-size: 2.5rem;
     }

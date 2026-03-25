@@ -83,3 +83,9 @@
     color: white;
     box-shadow: 0 4px 15px rgba(244, 63, 94, 0.3);
 }
+
+@media (max-width: 768px) {
+    .sidebar {
+        display: none;
+    }
+}

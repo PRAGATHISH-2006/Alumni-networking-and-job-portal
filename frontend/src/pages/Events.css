@@ -2,13 +2,43 @@
     padding: 2rem 0;
 }
 
+@media (max-width: 768px) {
+    .events-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .events-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .event-card {
+        padding: 1.5rem;
+    }
+
+    .event-card h3 {
+        font-size: 1.4rem;
+    }
+
+    .event-footer {
+        flex-direction: column;
+        gap: 1.5rem;
+        align-items: stretch;
+    }
+
+    .event-footer .btn {
+        width: 100%;
+    }
+}
+
 .events-header {
     text-align: left;
     margin-bottom: 4rem;
 }
 
 .events-header h1 {
-    font-size: 3.5rem;
+    font-size: clamp(2rem, 8vw, 3.5rem);
     font-weight: 800;
     margin-bottom: 0.5rem;
     letter-spacing: -0.03em;
