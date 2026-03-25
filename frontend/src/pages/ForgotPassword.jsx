@@ -9,6 +9,7 @@ const ForgotPassword = () => {
     const [email, setEmail] = useState('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState(false);
+    const [successMessage, setSuccessMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
     const handleSubmit = async (e) => {
@@ -17,7 +18,8 @@ const ForgotPassword = () => {
         setIsLoading(true);
 
         try {
-            await API.post('/api/auth/forgot-password', { email });
+            const { data } = await API.post('/api/auth/forgot-password', { email });
+            setSuccessMessage(data.message);
             setSuccess(true);
         } catch (err) {
             setError(err.response?.data?.message || 'Something went wrong. Please try again.');
@@ -40,12 +42,11 @@ const ForgotPassword = () => {
                         className="glass-card auth-card text-center"
                     >
                         <CheckCircle size={64} className="text-success" style={{ color: '#10b981', margin: '0 auto 1.5rem' }} />
-                        <h2 className="gradient-text" style={{ marginBottom: '1rem' }}>Check Your Email</h2>
+                        <h2 className="gradient-text" style={{ marginBottom: '1rem' }}>Success!</h2>
                         <p style={{ marginBottom: '2rem', color: 'var(--text-muted)' }}>
-                            We've sent a password reset link to <strong>{email}</strong>. 
-                            Please check your inbox and follow the instructions.
+                            {successMessage || "We've sent a password reset link to your email."}
                         </p>
-                        <Link to="/login" className="btn btn-primary w-full">
+                        <Link to="/login" className="btn btn-primary w-full" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
                             <ArrowLeft size={18} /> Back to Login
                         </Link>
                     </motion.div>

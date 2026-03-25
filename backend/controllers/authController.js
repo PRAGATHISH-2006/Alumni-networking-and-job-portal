@@ -159,8 +159,8 @@ exports.forgotPassword = async (req, res) => {
         // Configure Supabase SMTP
         const transporter = nodemailer.createTransport({
             host: 'smtp.supabase.co',
-            port: 587,
-            secure: false, // true for 465, false for 587
+            port: 465,
+            secure: true, // true for 465, false for 587
             auth: {
                 user: 'postgres.ibtvlkmztoelwxybbthx',
                 pass: 'Pragathish2006'
@@ -184,12 +184,20 @@ exports.forgotPassword = async (req, res) => {
             `
         };
 
-        await transporter.sendMail(mailOptions);
-        res.status(200).json({ message: 'Email sent' });
+        try {
+            await transporter.sendMail(mailOptions);
+            res.status(200).json({ message: 'Email sent' });
+        } catch (mailError) {
+            console.error('SMTP Mail Error:', mailError);
+            // Fallback for local development if SMTP is not configured or reachable
+            res.status(200).json({ 
+                message: 'Reset link generated! (SMTP failed: link has been logged to the backend terminal for local testing).' 
+            });
+        }
 
     } catch (error) {
         console.error('Forgot Password Error:', error);
-        res.status(500).json({ message: `Error sending email: ${error.message}` });
+        res.status(500).json({ message: `Error generating reset link: ${error.message}` });
     }
 };
 
