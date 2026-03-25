@@ -11,6 +11,7 @@ export const AuthProvider = ({ children }) => {
         const checkLoggedIn = async () => {
             try {
                 const { data } = await API.get('/api/auth/profile');
+                if (data.token) localStorage.setItem('token', data.token);
                 setUser(data);
             } catch (error) {
                 localStorage.removeItem('token'); // Clear it if invalid

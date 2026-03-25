@@ -106,11 +106,26 @@ exports.logoutUser = (req, res) => {
 };
 
 exports.getUserProfile = async (req, res) => {
-    const user = await User.findByPk(req.user.id);
-    if (user) {
-        res.json(user);
-    } else {
-        res.status(404).json({ message: 'User not found' });
+    try {
+        const user = await User.findByPk(req.user.id, {
+            attributes: { exclude: ['password'] }
+        });
+        
+        if (user) {
+            // Re-generate token to ensure localStorage can be populated even if user logged in via cookies only
+            const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+                expiresIn: '30d'
+            });
+            
+            res.json({
+                ...user.toJSON(),
+                token
+            });
+        } else {
+            res.status(404).json({ message: 'User not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: 'Server error' });
     }
 };
 
