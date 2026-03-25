@@ -1,23 +1,48 @@
+require('dotenv').config();
+const { sequelize } = require('./config/db');
 const { User } = require('./models');
+const bcrypt = require('bcryptjs');
 
-async function test() {
+async function resetPasswords() {
     try {
-        console.log('Testing User.findOne...');
-        const user = await User.findOne({ where: { email: 'admin@college.edu' } });
-        console.log('User found:', user ? user.email : 'not found');
-        
-        console.log('Testing User.create...');
-        const newUser = await User.create({
-            name: 'Test',
-            email: 'test' + Date.now() + '@test.com',
-            password: 'testpassword',
-            skills: ['js', 'css'],
-            interests: ['coding']
+        await sequelize.authenticate();
+        console.log('DB connected\n');
+
+        // Show all users
+        const users = await User.findAll({ attributes: ['id', 'email', 'role', 'isApproved', 'name'] });
+        console.log('=== ALL USERS ===');
+        users.forEach(u => {
+            const j = u.toJSON();
+            console.log(`  [${j.role}] ${j.email} | name: ${j.name} | approved: ${j.isApproved}`);
         });
-        console.log('New user created successfully!');
-    } catch (e) {
-        console.error('Error in Sequelize query:', e.message);
-        console.error(e);
+
+        // Reset admin password
+        const admin = await User.findOne({ where: { role: 'admin' } });
+        if (admin) {
+            const hashed = await bcrypt.hash('Admin@123', 12);
+            await sequelize.query('UPDATE "Users" SET password = :password WHERE email = :email', {
+                replacements: { password: hashed, email: admin.email }
+            });
+            console.log(`\n✅ Admin password reset to "Admin@123"`);
+            console.log(`   Email: ${admin.email}`);
+        } else {
+            // Create admin if doesn't exist
+            console.log('\nNo admin found, creating one...');
+            await User.create({
+                name: 'System Admin',
+                email: 'admin@alumni.com',
+                password: 'Admin@123',
+                role: 'admin',
+                isApproved: true
+            });
+            console.log('✅ Admin created: admin@alumni.com / Admin@123');
+        }
+
+    } catch (err) {
+        console.error('Error:', err.message);
+    } finally {
+        process.exit(0);
     }
 }
-test();
+
+resetPasswords();

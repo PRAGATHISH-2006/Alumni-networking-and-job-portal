@@ -73,6 +73,8 @@ const EventRegister = () => {
     const [isConfirmed, setIsConfirmed] = useState(false);
     const [timeLeft, setTimeLeft] = useState(5);
     const [isDownloading, setIsDownloading] = useState({ ticket: false, receipt: false });
+    // Synchronous ref guard — prevents double-submit regardless of React's async state
+    const submittedRef = React.useRef(false);
 
     const steps = [
         { id: 1, title: "Status & Profile", icon: <User size={20} /> },
@@ -108,27 +110,28 @@ const EventRegister = () => {
     };
 
     const handleSubmit = async () => {
-        if (isSubmitting || isConfirmed) return;
+        // Use ref (synchronous) to prevent any double-submission race condition
+        if (submittedRef.current || isConfirmed) return;
+        submittedRef.current = true;
         setIsSubmitting(true);
         try {
-            // Attempt to register in backend if id is a UUID (database event)
             await API.post(`/api/events/register/${id}`, formData, { withCredentials: true });
-            
             setIsSubmitting(false);
             setIsConfirmed(true);
             setCurrentStep(4);
         } catch (error) {
             console.error('Registration Error:', error);
             const msg = error.response?.data?.message || error.message || 'Server error';
-            
-            if (msg.toLowerCase().includes('already registered')) {
-                alert('You are already registered this event');
+            // Only show already-registered alert if we haven't already confirmed (i.e. a true duplicate attempt)
+            if (msg.toLowerCase().includes('already registered') && !isConfirmed) {
+                alert('You are already registered for this event.');
                 navigate('/events');
                 return;
             }
-            
-            alert('Registration failed: ' + msg);
+            // For any other error, reset the guard so user can try again
+            submittedRef.current = false;
             setIsSubmitting(false);
+            alert('Registration failed: ' + msg);
         }
     };
 
@@ -218,7 +221,7 @@ const EventRegister = () => {
                             <div className="ticket-left">
                                 <h1>{event.title}</h1>
                                 <div className="ticket-info-grid">
-                                    <div className="info-item"><Calendar size={16} /><span>{event.date}</span></div>
+                                    <div className="info-item"><Calendar size={16} /><span>{event.date ? new Date(event.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' }) : 'TBD'}</span></div>
                                     <div className="info-item"><Clock size={16} /><span>{event.time}</span></div>
                                     <div className="info-item"><MapPin size={16} /><span>{event.location}</span></div>
                                 </div>
@@ -350,11 +353,14 @@ const EventRegister = () => {
                             <h2>Event Preferences</h2>
                             <div className="input-group">
                                 <label>Dietary Requirements</label>
-                                <select value={formData.dietary} onChange={(e) => setFormData({ ...formData, dietary: e.target.value })}>
-                                    <option>None (Standard)</option>
-                                    <option>Vegetarian</option>
-                                    <option>Vegan</option>
-                                    <option>Halal</option>
+                                <select 
+                                    value={formData.dietary} 
+                                    onChange={(e) => setFormData({ ...formData, dietary: e.target.value })}
+                                    style={{ background: '#1e293b', color: '#e2e8f0', border: '1px solid rgba(255,255,255,0.1)' }}
+                                >
+                                    <option value="None" style={{ background: '#1e293b', color: '#e2e8f0' }}>None (Standard)</option>
+                                    <option value="Veg" style={{ background: '#1e293b', color: '#e2e8f0' }}>Veg</option>
+                                    <option value="Non-Veg" style={{ background: '#1e293b', color: '#e2e8f0' }}>Non-Veg</option>
                                 </select>
                             </div>
                             <div className="input-group">

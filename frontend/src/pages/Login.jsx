@@ -29,6 +29,14 @@ const Login = () => {
 
     return (
         <div className="auth-page">
+            <div className="auth-background">
+                <div className="auth-blob auth-blob-1"></div>
+                <div className="auth-blob auth-blob-2"></div>
+                <div className="auth-blob auth-blob-3"></div>
+            </div>
+            <div className="auth-watermark">
+                <img src="/logo.png" alt="Watermark Logo" />
+            </div>
             <div className="container">
                 <div className="glass-card auth-card">
                     <div className="auth-header">

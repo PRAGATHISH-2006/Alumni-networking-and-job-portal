@@ -383,7 +383,7 @@ const Admin = () => {
                                                     <td>
                                                         <div className="action-btns">
                                                             {renderCustomActions(activeTab, item, handleAction, setEditingItem, setShowReplyModal, setViewingAttendees, setViewingApplicants)}
-                                                            <button className="btn-icon danger" onClick={() => handleAction('delete', `${activeTab === 'users' ? 'user' : activeTab === 'jobs' ? 'job' : activeTab === 'events' ? 'event' : activeTab}/${item.id}`, 'Removed successfully')}><Trash2 size={16} /></button>
+                                                            <button className="btn-icon danger" onClick={() => handleAction('delete', `${activeTab === 'users' ? 'users' : activeTab === 'jobs' ? 'jobs' : activeTab === 'events' ? 'events' : activeTab}/${item.id}`, 'Removed successfully')}><Trash2 size={16} /></button>
                                                         </div>
                                                     </td>
                                                 </tr>

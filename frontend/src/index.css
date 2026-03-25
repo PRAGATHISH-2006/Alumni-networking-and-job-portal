@@ -34,6 +34,11 @@
   /* Navbar height */
 }
 
+.main-wrapper.auth-wrapper {
+  margin-top: 0;
+}
+
+
 .content-area {
   flex: 1;
   margin-left: 240px;
@@ -46,6 +51,12 @@
 
 .content-area.full-width {
   margin-left: 0;
+}
+
+.content-area.full-width.auth-page-wrapper {
+  padding: 0;
+  margin-top: 0;
+  min-height: 100vh;
 }
 
 @media (max-width: 1024px) {
@@ -159,4 +170,25 @@ ul {
   to {
     transform: rotate(360deg);
   }
+}
+
+/* ── Global dark-theme dropdown fix ── */
+select {
+  background: #1e293b;
+  color: #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  appearance: auto;
+  cursor: pointer;
+}
+
+select option {
+  background: #1e293b;
+  color: #e2e8f0;
+}
+
+select:focus {
+  outline: none;
+  border-color: var(--primary);
 }
