@@ -7,16 +7,12 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 3rem;
-    flex-wrap: wrap;
-    gap: 1.5rem;
 }
 
 .header-actions {
     display: flex;
-    gap: 1rem;
+    gap: 1.5rem;
     align-items: center;
-    flex-wrap: wrap;
-    width: 100%;
 }
 
 .search-bar-gl {
@@ -27,8 +23,7 @@
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    width: 100%;
-    max-width: 20rem; /* ~320px but relative */
+    width: 300px;
 }
 
 .search-bar-gl input {
@@ -40,8 +35,8 @@
 
 .jobs-layout {
     display: grid;
-    grid-template-columns: 18rem 1fr; /* ~288px but relative */
-    gap: var(--space-md);
+    grid-template-columns: 280px 1fr;
+    gap: 2.5rem;
 }
 
 .jobs-filter-panel {
@@ -186,9 +181,9 @@
 }
 
 .modal-card {
-    max-width: 45rem; /* ~720px but relative */
+    max-width: 700px;
     width: 100%;
-    padding: var(--space-md);
+    padding: 2.5rem;
 }
 
 .modal-header {
@@ -230,83 +225,4 @@
     padding: 5rem;
     text-align: center;
     color: var(--text-muted);
-}
-
-@media (max-width: 991px) {
-    .jobs-layout {
-        grid-template-columns: 1fr;
-    }
-
-    .jobs-filter-panel {
-        position: static;
-        margin-bottom: var(--space-md);
-    }
-
-    .filter-options {
-        flex-direction: row;
-        overflow-x: auto;
-        padding-bottom: var(--space-xs);
-    }
-
-    .filter-btn {
-        white-space: nowrap;
-    }
-}
-
-@media (max-width: 576px) {
-    .jobs-header {
-        text-align: center;
-        justify-content: center;
-    }
-
-    .header-main {
-        width: 100%;
-    }
-
-    .header-main h1 {
-        font-size: var(--fs-h2);
-    }
-
-    .search-bar-gl {
-        max-width: none;
-    }
-
-    .post-btn {
-        width: 100%;
-    }
-
-    .job-card {
-        padding: var(--space-sm);
-    }
-
-    .job-main {
-        flex-direction: column;
-        gap: var(--space-xs);
-    }
-
-    .job-meta {
-        flex-wrap: wrap;
-        gap: var(--space-xs);
-    }
-
-    .job-footer {
-        flex-direction: column;
-        gap: var(--space-sm);
-        align-items: stretch;
-    }
-
-    .card-actions .btn {
-        width: 100%;
-    }
-
-    .modal-card {
-        padding: var(--space-sm);
-        max-height: 90vh;
-        overflow-y: auto;
-    }
-
-    .form-grid {
-        grid-template-columns: 1fr;
-        gap: var(--space-sm);
-    }
 }

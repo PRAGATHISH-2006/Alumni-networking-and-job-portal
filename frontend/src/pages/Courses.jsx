@@ -81,7 +81,7 @@ const Courses = () => {
                         className="glass-card course-card"
                     >
                         <div className="course-img">
-                            <img src={course.image} alt={course.title} loading="lazy" />
+                            <img src={course.image} alt={course.title} />
                             <div className="course-play"><PlayCircle size={40} /></div>
                         </div>
                         <div className="course-body">

@@ -22,7 +22,7 @@
     top: 0;
     left: 0;
     bottom: 0;
-    width: 17.5rem; /* ~280px but relative */
+    width: 280px;
     background: #111827;
     border-right: 1px solid rgba(255, 255, 255, 0.05);
     z-index: 1001;
@@ -98,14 +98,8 @@
 .admin-main {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 1.5rem; /* Reduced padding for mobile */
+    padding: 2.5rem;
     background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.05), transparent);
-}
-
-@media (min-width: 769px) {
-    .admin-main {
-        padding: 2.5rem;
-    }
 }
 
 .admin-topbar {
@@ -149,8 +143,7 @@
 
 .search-wrapper {
     position: relative;
-    width: 100%;
-    max-width: 25rem; /* ~400px but relative */
+    width: 400px;
 }
 
 .search-wrapper input {
@@ -457,48 +450,169 @@
     }
 }
 
-@media (max-width: 991px) {
-    .admin-drawer {
-        width: 15rem; /* ~240px but relative */
+@media (max-width: 768px) {
+    .admin-sidebar {
+        width: 80px;
     }
-
-    .admin-topbar {
-        flex-direction: column;
-        gap: var(--space-sm);
-        align-items: stretch;
+    .sidebar-link span, .nav-group-label, .sidebar-brand {
+        display: none;
     }
-
-    .topbar-left {
-        width: 100%;
-        justify-content: space-between;
-    }
-
-    .search-wrapper {
-        max-width: none;
-    }
-
-    .topbar-actions {
-        width: 100%;
-        justify-content: space-between;
+    .admin-main {
+        padding: 1.5rem;
     }
 }
 
-@media (max-width: 576px) {
-    .admin-main {
-        padding: var(--space-sm);
-    }
+/* Modal System */
+.admin-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 2rem;
+}
 
-    .stats-grid {
+.admin-modal {
+    background: #1e293b;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    width: 100%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.modal-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #f8fafc;
+}
+
+.modal-header button {
+    background: transparent;
+    border: none;
+    color: #64748b;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.modal-header button:hover {
+    color: #f8fafc;
+}
+
+.modal-form {
+    padding: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.85rem;
+    color: #94a3b8;
+    margin-bottom: 0.5rem;
+}
+
+.form-group input, 
+.form-group textarea, 
+.form-group select {
+    width: 100%;
+    background: rgba(15, 23, 42, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    color: white;
+    font-family: inherit;
+}
+
+.grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.btn {
+    padding: 0.6rem 1.2rem;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+}
+
+.btn-primary {
+    background: #3b82f6;
+    color: white;
+    border: none;
+}
+
+.btn-primary:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+}
+
+.btn-ghost {
+    background: rgba(255,255,255,0.05);
+    color: #94a3b8;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.btn-ghost:hover {
+    background: rgba(255,255,255,0.1);
+    color: white;
+}
+
+.original-message {
+    border-left: 2px solid #3b82f6;
+}
+
+.spinner {
+    animation: spin 1s linear infinite;
+}
+
+/* Enhancements for Collections/Fee */
+.admin-table td strong {
+    color: #f8fafc;
+}
+
+.admin-table td small {
+    display: block;
+    margin-top: 3px;
+}
+
+/* Responsive fixes */
+@media (max-width: 640px) {
+    .grid-2 {
         grid-template-columns: 1fr;
-        gap: var(--space-sm);
     }
-
-    .dashboard-grid {
-        grid-template-columns: 1fr;
-    }
-
     .admin-modal {
-        margin: var(--space-sm);
-        padding: var(--space-sm);
+        margin: 1rem;
     }
 }

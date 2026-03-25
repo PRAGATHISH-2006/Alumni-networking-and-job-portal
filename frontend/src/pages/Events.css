@@ -2,52 +2,22 @@
     padding: 2rem 0;
 }
 
-@media (max-width: 576px) {
-    .events-header {
-        text-align: center;
-        margin-bottom: var(--space-md);
-    }
-
-    .events-grid {
-        grid-template-columns: 1fr;
-        gap: var(--space-sm);
-    }
-
-    .event-card {
-        padding: var(--space-sm);
-    }
-
-    .event-card h3 {
-        font-size: calc(var(--fs-h3) * 1.1);
-    }
-
-    .event-footer {
-        flex-direction: column;
-        gap: var(--space-sm);
-        align-items: stretch;
-    }
-
-    .event-footer .btn {
-        width: 100%;
-    }
-}
-
 .events-header {
     text-align: left;
     margin-bottom: 4rem;
 }
 
 .events-header h1 {
-    font-size: var(--fs-h1);
+    font-size: 3.5rem;
     font-weight: 800;
-    margin-bottom: var(--space-xs);
+    margin-bottom: 0.5rem;
     letter-spacing: -0.03em;
 }
 
 .events-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr)); /* ~352px but relative */
-    gap: var(--space-md);
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 2.5rem;
 }
 
 .event-card {

@@ -56,42 +56,6 @@
     filter: drop-shadow(0 0 5px var(--glow));
 }
 
-@media (max-width: 576px) {
-    .mentorship-header {
-        text-align: center;
-        margin-bottom: var(--space-md);
-    }
-
-    .mentor-search-bar {
-        flex-direction: column;
-        gap: var(--space-sm);
-        padding: var(--space-sm);
-    }
-
-    .mentor-search-input {
-        width: 100%;
-    }
-
-    .mentor-filters {
-        width: 100%;
-    }
-
-    .mentor-filters select {
-        width: 100%;
-    }
-
-    .mentors-grid {
-        grid-template-columns: 1fr;
-        gap: var(--space-sm);
-    }
-
-    .modal-card {
-        padding: var(--space-sm);
-        max-height: 90vh;
-        overflow-y: auto;
-    }
-}
-
 .mentorship-header {
     margin-bottom: 3rem;
 }
@@ -238,13 +202,6 @@
     line-height: 1.5;
 }
 
-.mentorship-header h1 {
-    font-size: var(--fs-h1);
-    font-weight: 800;
-    margin-bottom: var(--space-xs);
-    letter-spacing: -0.03em;
-}
-
 .bubble-time {
     display: block;
     font-size: 0.7rem;
@@ -320,17 +277,6 @@
     border-top: 1px solid var(--glass-border);
     display: flex;
     gap: 1rem;
-}
-
-.mentor-search-bar {
-    display: flex;
-    gap: var(--space-sm);
-    margin-bottom: var(--space-md);
-    background: rgba(255, 255, 255, 0.03);
-    padding: var(--space-sm);
-    border-radius: 1rem;
-    border: 1px solid var(--glass-border);
-    flex-wrap: wrap;
 }
 
 .chat-input-area input {

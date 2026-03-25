@@ -37,9 +37,9 @@ const StudentDashboard = () => {
     if (user && user.role === 'student' && !user.isApproved) {
         return (
             <div className="role-dashboard pending-state">
-                <div className="container" style={{ textAlign: 'center', padding: 'var(--space-xl) var(--space-sm)' }}>
-                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-                        <div className="glass-card" style={{ padding: 'var(--space-lg)', maxWidth: '40rem', margin: '0 auto' }}>
+                <div className="container" style={{ textAlign: 'center', padding: '100px 20px' }}>
+                    <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}>
+                        <div className="glass-card" style={{ padding: '3rem', maxWidth: '600px', margin: '0 auto' }}>
                             <ShieldCheck size={64} color="var(--primary)" style={{ marginBottom: '1.5rem' }} />
                             <h1 style={{ marginBottom: '1rem' }}>Account <span className="gradient-text">Pending Approval</span></h1>
                             <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', marginBottom: '2rem' }}>
@@ -109,8 +109,7 @@ const StudentDashboard = () => {
                             <div className="text-center p-4"><Loader className="spin" /></div>
                         ) : applications.length > 0 ? (
                             <div className="glass-card" style={{ padding: '0', overflow: 'hidden' }}>
-                                <div className="table-responsive">
-                                    <table className="admin-table" style={{ width: '100%', marginBottom: 0 }}>
+                                <table className="admin-table" style={{ width: '100%', marginBottom: 0 }}>
                                     <thead style={{ background: 'rgba(255,255,255,0.02)' }}>
                                         <tr>
                                             <th style={{ padding: '1rem' }}>Job Opportunity</th>
@@ -146,8 +145,7 @@ const StudentDashboard = () => {
                                             </tr>
                                         ))}
                                     </tbody>
-                                    </table>
-                                </div>
+                                </table>
                             </div>
                         ) : (
                             <div className="glass-card text-center" style={{ padding: '2rem' }}>

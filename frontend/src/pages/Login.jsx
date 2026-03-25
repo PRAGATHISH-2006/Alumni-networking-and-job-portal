@@ -36,7 +36,7 @@ const Login = () => {
                 <div className="auth-blob auth-blob-3"></div>
             </div>
             <div className="auth-watermark">
-                <img src="/logo.png" alt="Watermark Logo" loading="lazy" />
+                <img src="/logo.png" alt="Watermark Logo" />
             </div>
             <div className="container">
                 <div className="glass-card auth-card">

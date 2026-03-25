@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { Rocket, ChevronDown, LogOut, Menu, X } from 'lucide-react';
 import './Navbar.css';
 
-const Navbar = ({ toggleSidebar }) => {
+const Navbar = () => {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -130,13 +130,7 @@ const Navbar = ({ toggleSidebar }) => {
                     )}
                 </div>
 
-                <div className="mobile-toggle" onClick={() => {
-                    if (location.pathname !== '/' && location.pathname !== '/home') {
-                        toggleSidebar();
-                    } else {
-                        setIsMobileMenuOpen(!isMobileMenuOpen);
-                    }
-                }}>
+                <div className="mobile-toggle" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
                     {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
                 </div>
             </div>

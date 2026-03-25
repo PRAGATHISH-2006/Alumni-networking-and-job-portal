@@ -55,7 +55,7 @@ const Magazine = () => {
                         className="glass-card magazine-card"
                     >
                         <div className="mag-cover-wrapper">
-                            <img src={mag.cover} alt={mag.title} loading="lazy" />
+                            <img src={mag.cover} alt={mag.title} />
                             <div className="mag-overlay">
                                 <button className="icon-btn"><Eye size={24} /></button>
                                 <button className="icon-btn"><Download size={24} /></button>

@@ -9,13 +9,12 @@ import {
     Trophy,
     MessageSquare,
     LogOut,
-    Shield,
-    X
+    Shield
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import './Sidebar.css';
 
-const Sidebar = ({ isOpen, onClose }) => {
+const Sidebar = () => {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
 
@@ -48,29 +47,20 @@ const Sidebar = ({ isOpen, onClose }) => {
     }
 
     return (
-        <>
-            {/* Mobile Overlay Backdrop */}
-            <div className={`sidebar-overlay ${isOpen ? 'active' : ''}`} onClick={onClose} />
-            
-            <aside className={`sidebar ${isOpen ? 'open' : ''}`}>
-                <div className="sidebar-header-mobile">
-                    <button className="close-sidebar" onClick={onClose}><X size={24} /></button>
-                </div>
-                <div className="sidebar-menu">
-                    {menuItems.map((item) => (
-                        <NavLink
-                            key={item.path}
-                            to={item.path}
-                            className={({ isActive }) => isActive ? 'sidebar-item active' : 'sidebar-item'}
-                            onClick={onClose}
-                        >
-                            <span className="sidebar-icon">{item.icon}</span>
-                            <span className="sidebar-label">{item.label}</span>
-                        </NavLink>
-                    ))}
-                </div>
-            </aside>
-        </>
+        <aside className="sidebar">
+            <div className="sidebar-menu">
+                {menuItems.map((item) => (
+                    <NavLink
+                        key={item.path}
+                        to={item.path}
+                        className={({ isActive }) => isActive ? 'sidebar-item active' : 'sidebar-item'}
+                    >
+                        <span className="sidebar-icon">{item.icon}</span>
+                        <span className="sidebar-label">{item.label}</span>
+                    </NavLink>
+                ))}
+            </div>
+        </aside>
     );
 };
 

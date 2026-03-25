@@ -3,10 +3,10 @@
 }
 
 .profile-header-banner {
-    height: clamp(200px, 20vw, 300px);
-    background: var(--grad-primary);
+    height: 250px;
+    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
     position: relative;
-    border-radius: 0 0 clamp(20px, 4vw, 40px) clamp(20px, 4vw, 40px);
+    border-radius: 0 0 40px 40px;
     overflow: hidden;
 }
 
@@ -19,19 +19,11 @@
 
 .profile-content {
     max-width: 1200px;
-    margin: -5rem auto 0;
-    padding: 0 var(--space-sm);
+    margin: -100px auto 0;
+    padding: 0 2rem;
     display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-md);
-    position: relative;
-    z-index: 10;
-}
-
-@media (min-width: 992px) {
-    .profile-content {
-        grid-template-columns: clamp(280px, 30%, 350px) 1fr;
-    }
+    grid-template-columns: 350px 1fr;
+    gap: 2.5rem;
 }
 
 .profile-sidebar-card {
@@ -44,8 +36,8 @@
 
 .profile-avatar-wrapper {
     position: relative;
-    width: clamp(100px, 15vw, 150px);
-    height: clamp(100px, 15vw, 150px);
+    width: 150px;
+    height: 150px;
     margin: 0 auto 2rem;
 }
 
@@ -382,25 +374,6 @@
 .btn-remove:hover {
     background: #ef4444;
     color: white;
-}
-
-.profile-container {
-    max-width: 100%;
-    margin: 0 auto;
-    padding: var(--space-md);
-}
-
-.profile-header {
-    background: rgba(15, 23, 42, 0.4);
-    border-radius: 1.5rem;
-    padding: var(--space-md);
-    margin-bottom: var(--space-md);
-    border: 1px solid var(--glass-border);
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    position: relative;
-    overflow: hidden;
 }
 
 @media (max-width: 1024px) {
