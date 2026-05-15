@@ -57,7 +57,7 @@ exports.getDashboardStats = async (req, res) => {
         });
     } catch (error) {
         console.error('Stats Error:', error);
-        res.status(500).json({ message: 'Server error', error: error.message });
+        res.status(500).json({ message: `Server error: ${error.message}` });
     }
 };
 
@@ -198,7 +198,8 @@ exports.deleteUser = async (req, res) => {
         await user.destroy();
         res.json({ message: 'User removed from system' });
     } catch (error) {
-        res.status(500).json({ message: 'Server error' });
+        console.error('Delete user error:', error);
+        res.status(500).json({ message: `Error deleting user: ${error.message}` });
     }
 };
 
@@ -235,6 +236,16 @@ exports.getAllDonations = async (req, res) => {
         res.json(donations);
     } catch (error) {
         res.status(500).json({ message: 'Server error' });
+    }
+};
+
+exports.resetDonations = async (req, res) => {
+    try {
+        await Donation.destroy({ where: {}, truncate: true });
+        res.json({ message: 'All donation records have been reset' });
+    } catch (error) {
+        console.error('Reset Donations Error:', error);
+        res.status(500).json({ message: 'Failed to reset donations' });
     }
 };
 
@@ -351,7 +362,8 @@ exports.createJob = async (req, res) => {
         const job = await Job.create({ ...req.body, postedBy: req.user.id });
         res.status(201).json(job);
     } catch (error) {
-        res.status(500).json({ message: 'Error creating job' });
+        console.error('Job Creation Error:', error);
+        res.status(500).json({ message: `Error creating job: ${error.message}` });
     }
 };
 

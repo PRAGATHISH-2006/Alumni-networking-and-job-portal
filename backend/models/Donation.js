@@ -31,6 +31,8 @@ const Donation = sequelize.define('Donation', {
         type: DataTypes.STRING,
         unique: true
     }
+}, {
+    tableName: 'Donations'
 });
 
 module.exports = Donation;

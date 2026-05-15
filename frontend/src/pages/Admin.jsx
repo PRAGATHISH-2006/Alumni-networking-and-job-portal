@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import API from '../api/axios';
 import { 
     LayoutDashboard, 
     Users, 
@@ -59,12 +59,13 @@ const Admin = () => {
         setLoading(true);
         setError(null);
         try {
-            const statsRes = await axios.get('http://localhost:5000/api/admin/stats');
+            const statsRes = await API.get('/api/admin/stats');
             setStats(statsRes.data);
             loadTabData(activeTab);
         } catch (err) {
             console.error('Fetch error:', err);
-            setError('Failed to fetch dashboard data. Please check your connection.');
+            const serverMsg = err.response?.data?.message || err.message || '';
+            setError(`Failed to fetch dashboard data. ${serverMsg}`);
         } finally {
             setLoading(false);
         }
@@ -85,7 +86,7 @@ const Admin = () => {
         }
 
         try {
-            const res = await axios.get(`http://localhost:5000/api/admin/${endpoint}`);
+            const res = await API.get(`/api/admin/${endpoint}`);
             setData(res.data);
         } catch (error) {
             console.error(`Error loading ${tab}:`, error);
@@ -106,9 +107,9 @@ const Admin = () => {
             const successMsg = isData ? maybeMsg : dataOrMsg;
 
             if (method === 'post' || method === 'put' || method === 'patch') {
-                await axios[method](`http://localhost:5000/api/admin/${endpoint}`, data);
+                await API[method](`/api/admin/${endpoint}`, data);
             } else {
-                await axios[method](`http://localhost:5000/api/admin/${endpoint}`);
+                await API[method](`/api/admin/${endpoint}`);
             }
             fetchData();
             if (successMsg) console.log(successMsg);
@@ -359,6 +360,19 @@ const Admin = () => {
                                             <Trophy size={14} /> Create Story
                                         </button>
                                     )}
+                                    {activeTab === 'donations' && (
+                                        <button 
+                                            className="btn btn-primary btn-sm danger" 
+                                            onClick={() => {
+                                                if (window.confirm('Are you sure you want to PERMANENTLY reset all donation records? This cannot be undone.')) {
+                                                    handleAction('delete', 'donations', 'Donations reset successfully');
+                                                }
+                                            }} 
+                                            style={{ display: 'flex', alignItems: 'center', gap: '5px', padding: '0.4rem 0.8rem', fontSize: '0.8rem', background: '#ef4444' }}
+                                        >
+                                            <RefreshCw size={14} /> Reset All Donations
+                                        </button>
+                                    )}
                                     <span className="badge-alert" style={{ background: 'rgba(59, 130, 246, 0.1)', color: '#3b82f6', borderRadius: '8px', padding: '5px 12px' }}>
                                         {filteredData.length} records found
                                     </span>
@@ -382,7 +396,7 @@ const Admin = () => {
                                                     <td>
                                                         <div className="action-btns">
                                                             {renderCustomActions(activeTab, item, handleAction, setEditingItem, setShowReplyModal, setViewingAttendees, setViewingApplicants)}
-                                                            <button className="btn-icon danger" onClick={() => handleAction('delete', `${activeTab === 'users' ? 'user' : activeTab === 'jobs' ? 'job' : activeTab === 'events' ? 'event' : activeTab}/${item.id}`, 'Removed successfully')}><Trash2 size={16} /></button>
+                                                            <button className="btn-icon danger" onClick={() => handleAction('delete', `${activeTab === 'users' ? 'users' : activeTab === 'jobs' ? 'jobs' : activeTab === 'events' ? 'events' : activeTab}/${item.id}`, 'Removed successfully')}><Trash2 size={16} /></button>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -637,7 +651,7 @@ const Admin = () => {
                                                 <td>
                                                     <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                                                         {app.JobApplicants.resumePath ? (
-                                                            <a href={`http://localhost:5000/${app.JobApplicants.resumePath}`} target="_blank" rel="noopener noreferrer" className="badge-alert" style={{ background: 'rgba(59, 130, 246, 0.1)', color: '#3b82f6', textDecoration: 'none', padding: '2px 8px', borderRadius: '4px' }}>
+                                                            <a href={`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/${app.JobApplicants.resumePath}`} target="_blank" rel="noopener noreferrer" className="badge-alert" style={{ background: 'rgba(59, 130, 246, 0.1)', color: '#3b82f6', textDecoration: 'none', padding: '2px 8px', borderRadius: '4px' }}>
                                                                 View Resume
                                                             </a>
                                                         ) : <span className="text-muted">No Resume</span>}
@@ -664,7 +678,7 @@ const Admin = () => {
                                                         const formData = new FormData(e.target);
                                                         const update = Object.fromEntries(formData);
                                                         try {
-                                                            await axios.patch(`http://localhost:5000/api/jobs/${viewingApplicants.job.id}/manage/${app.id}`, update);
+                                                            await API.patch(`/api/jobs/${viewingApplicants.job.id}/manage/${app.id}`, update);
                                                             // Update local state
                                                             const updatedApplicants = viewingApplicants.applicants.map(a => 
                                                                 a.id === app.id ? { ...a, JobApplicants: { ...a.JobApplicants, ...update } } : a
@@ -936,7 +950,7 @@ const renderCustomActions = (tab, item, handleAction, setEditingItem, setShowRep
                 <>
                     <button className="btn-icon success" onClick={async () => {
                         try {
-                            const res = await axios.get(`http://localhost:5000/api/jobs/${item.id}/applicants`);
+                            const res = await API.get(`/api/jobs/${item.id}/applicants`);
                             setViewingApplicants({ job: item, applicants: res.data });
                         } catch (err) {
                             console.error(err);

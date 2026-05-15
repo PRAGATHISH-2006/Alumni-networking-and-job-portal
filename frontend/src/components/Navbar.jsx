@@ -113,8 +113,8 @@ const Navbar = () => {
                     {user ? (
                         <div className="nav-auth-info">
                             <Link to="/profile" className="user-profile-link">
-                                <div className="user-avatar-small">{user.name.charAt(0)}</div>
-                                <span className="user-name">{user.name}</span>
+                                <div className="user-avatar-small">{user?.name?.charAt(0) || '?'}</div>
+                                <span className="user-name">{user?.name || 'User'}</span>
                             </Link>
                             {user.role === 'admin' && <Link to="/admin" className="admin-link">Admin</Link>}
                             <button className="logout-btn" onClick={async () => {

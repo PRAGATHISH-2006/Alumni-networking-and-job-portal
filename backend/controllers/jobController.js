@@ -82,7 +82,8 @@ exports.getJobApplicants = async (req, res) => {
 
         res.json(job.applicants);
     } catch (error) {
-        res.status(500).json({ message: 'Server error' });
+        console.error('Fetch Applicants Error:', error);
+        res.status(500).json({ message: 'Server error', error: error.message });
     }
 };
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, CreditCard, ChevronRight, CheckCircle2, Download, QrCode, Timer, ShieldCheck, Wallet } from 'lucide-react';
-import axios from 'axios';
+import API from '../api/axios';
 import './Donations.css';
 
 const DonationSteps = {
@@ -37,7 +37,7 @@ const Donations = () => {
 
     const handlePayment = async (method) => {
         try {
-            await axios.post('http://localhost:5000/api/donate', {
+            await API.post('/api/donate', {
                 fundType: selection.type.title,
                 amount: Number(selection.amount),
                 paymentMethod: method

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Quote, ExternalLink, Award, GraduationCap, Plus, X, Send, Loader } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import axios from 'axios';
+import API from '../api/axios';
 import './Stories.css';
 
 const Stories = () => {
@@ -17,7 +17,7 @@ const Stories = () => {
 
     const fetchStories = async () => {
         try {
-            const { data } = await axios.get('http://localhost:5000/api/stories');
+            const { data } = await API.get('/api/stories');
             setStories(data);
         } catch (error) {
             console.error(error);
@@ -33,7 +33,7 @@ const Stories = () => {
     const handleAddStory = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:5000/api/stories', newStory);
+            await API.post('/api/stories', newStory);
             setShowModal(false);
             setNewStory({ quote: '', achievement: '' });
             alert("Your success story has been submitted for approval!");

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import API from '../api/axios';
 import { Calendar, MapPin, Users, Video, Clock, Loader } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useNavigate, Link } from 'react-router-dom';
@@ -23,7 +23,7 @@ const Events = () => {
     useEffect(() => {
         const fetchEvents = async () => {
             try {
-                const { data } = await axios.get('http://localhost:5000/api/events');
+                const { data } = await API.get('/api/events');
                 setEvents(Array.isArray(data) ? data : []);
             } catch (error) {
                 console.error('Fetch events error:', error);

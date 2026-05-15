@@ -33,6 +33,8 @@ const Story = sequelize.define('Story', {
         type: DataTypes.BOOLEAN,
         defaultValue: false
     }
+}, {
+    tableName: 'Stories'
 });
 
 module.exports = Story;

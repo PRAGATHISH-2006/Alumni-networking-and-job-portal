@@ -1,7 +1,8 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
+import SplashScreen from './components/SplashScreen';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -25,7 +26,10 @@ import CoursePlayer from './pages/CoursePlayer';
 import EventRegister from './pages/EventRegister';
 import Profile from './pages/Profile';
 import AlumniChat from './pages/AlumniChat';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { AnimatePresence } from 'framer-motion';
 
 function App() {
   return (
@@ -40,27 +44,57 @@ function App() {
 function AppContent() {
   const { user, loading } = useAuth();
   const location = useLocation();
-  const isAuthPath = location.pathname === '/login' || location.pathname === '/register';
+  const navigate = useNavigate();
+  const isAuthPath = location.pathname === '/login' || 
+                     location.pathname === '/register' || 
+                     location.pathname === '/forgot-password' || 
+                     location.pathname.startsWith('/reset-password/');
   const isAdminPath = location.pathname.startsWith('/admin');
+  const [showSplash, setShowSplash] = React.useState(true);
+  const [splashDone, setSplashDone] = React.useState(false);
+
+  const handleSplashFinish = () => {
+    setShowSplash(false);
+    // Wait for exit animation to finish, then always show login page
+    setTimeout(() => {
+      setSplashDone(true);
+      navigate('/login');
+    }, 850);
+  };
+
   const isUnapproved = user && user.role !== 'admin' && !user.isApproved;
   const hideSidebar = isAdminPath || user?.role === 'admin' || isAuthPath;
 
-  if (loading) return null; // Or a loading spinner
+  if (!splashDone) {
+    return (
+      <AnimatePresence mode="wait">
+        {showSplash && (
+          <SplashScreen key="splash" onFinish={handleSplashFinish} />
+        )}
+      </AnimatePresence>
+    );
+  }
 
-  // If logged in, show the full application layout
+  if (loading) return (
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', background: '#0f172a', color: 'white' }}>
+      <div className="animate-spin" style={{ width: '40px', height: '40px', border: '4px solid rgba(255,255,255,0.1)', borderTop: '4px solid #3b82f6', borderRadius: '50%' }}></div>
+    </div>
+  );
+
   return (
     <div className="layout-root">
       {!isAuthPath && <Navbar />}
-      <div className="main-wrapper">
+      <div className={`main-wrapper${isAuthPath ? ' auth-wrapper' : ''}`}>
         {!hideSidebar && <Sidebar />}
-        <main className={`content-area ${hideSidebar ? 'full-width' : ''}`}>
+        <main className={`content-area ${hideSidebar ? 'full-width' : ''} ${isAuthPath ? 'auth-page-wrapper' : ''}`}>
           <Routes>
             <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
             <Route path="/register" element={!user ? <Register /> : <Navigate to="/" />} />
+            <Route path="/forgot-password" element={!user ? <ForgotPassword /> : <Navigate to="/" />} />
+            <Route path="/reset-password/:token" element={!user ? <ResetPassword /> : <Navigate to="/" />} />
             
             <Route path="/" element={user ? <Home /> : <Navigate to="/login" />} />
             
-            {/* All other routes are restricted if unapproved */}
             {!isUnapproved ? (
               <>
                 <Route path="/directory" element={<Directory />} />
@@ -85,7 +119,6 @@ function AppContent() {
                 <Route path="/profile/:userId" element={<Profile />} />
               </>
             ) : (
-              // If unapproved, any attempt to access restricted routes redirects to home (which shows pending status)
               <Route path="*" element={<Home />} />
             )}
             

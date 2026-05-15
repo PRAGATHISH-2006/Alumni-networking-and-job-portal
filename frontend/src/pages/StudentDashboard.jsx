@@ -1,5 +1,5 @@
 import React from 'react';
-import axios from 'axios';
+import API from '../api/axios';
 import { motion } from 'framer-motion';
 import { Search, Briefcase, Calendar, MessageCircle, UserCircle, Loader, ShieldCheck, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -14,7 +14,7 @@ const StudentDashboard = () => {
     React.useEffect(() => {
         const fetchApplications = async () => {
             try {
-                const { data } = await axios.get('http://localhost:5000/api/jobs/my-applications');
+                const { data } = await API.get('/api/jobs/my-applications');
                 setApplications(data);
             } catch (err) {
                 console.error('Fetch applications error:', err);

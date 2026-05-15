@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
+import API from '../api/axios';
 import { 
     MessageSquare, 
     Check, 
@@ -35,8 +35,8 @@ const AlumniChat = () => {
         setLoading(true);
         try {
             const [reqRes, chatRes] = await Promise.all([
-                axios.get('http://localhost:5000/api/mentorship/requests'),
-                axios.get('http://localhost:5000/api/messages/chats')
+                API.get('/api/mentorship/requests'),
+                API.get('/api/messages/chats')
             ]);
 
             // Filter for alumni-to-alumni only
@@ -69,7 +69,7 @@ const AlumniChat = () => {
     const fetchMessages = async (partnerId) => {
         setMsgLoading(true);
         try {
-            const { data } = await axios.get(`http://localhost:5000/api/messages/${partnerId}`);
+            const { data } = await API.get(`/api/messages/${partnerId}`);
             setMessages(data);
             scrollToBottom();
         } catch (error) {
@@ -90,7 +90,7 @@ const AlumniChat = () => {
         if (!newMessage.trim() || !selectedChat) return;
 
         try {
-            const { data } = await axios.post('http://localhost:5000/api/messages', {
+            const { data } = await API.post('/api/messages', {
                 receiverId: selectedChat.id,
                 content: newMessage
             });
@@ -104,7 +104,7 @@ const AlumniChat = () => {
 
     const handleStatusUpdate = async (id, status) => {
         try {
-            await axios.put(`http://localhost:5000/api/mentorship/${id}`, { status });
+            await API.put(`/api/mentorship/${id}`, { status });
             fetchData();
         } catch (error) {
             console.error(error);
@@ -229,7 +229,7 @@ const AlumniChat = () => {
                                                         <div key={idx} className={`message-bubble ${m.senderId === user.id ? 'sent' : 'received'}`}>
                                                             {m.imageUrl && (
                                                                 <div className="chat-image-container">
-                                                                    <img src={`http://localhost:5000${m.imageUrl}`} alt="Shared" className="chat-img" />
+                                                                    <img src={`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${m.imageUrl}`} alt="Shared" className="chat-img" />
                                                                 </div>
                                                             )}
                                                             {m.content && <p className="msg-text">{m.content}</p>}
@@ -253,7 +253,7 @@ const AlumniChat = () => {
                                                             const formData = new FormData();
                                                             formData.append('receiverId', selectedChat.id);
                                                             formData.append('image', file);
-                                                            axios.post('http://localhost:5000/api/messages', formData)
+                                                            API.post('/api/messages', formData)
                                                                 .then(({data}) => {
                                                                     setMessages([...messages, data]);
                                                                     scrollToBottom();

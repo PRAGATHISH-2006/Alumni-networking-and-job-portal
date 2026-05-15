@@ -1,6 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import axios from 'axios';
-axios.defaults.withCredentials = true;
+import API from '../api/axios';
 
 const AuthContext = createContext();
 
@@ -11,9 +10,11 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const checkLoggedIn = async () => {
             try {
-                const { data } = await axios.get('http://localhost:5000/api/auth/profile');
+                const { data } = await API.get('/api/auth/profile');
+                if (data.token) localStorage.setItem('token', data.token);
                 setUser(data);
             } catch (error) {
+                localStorage.removeItem('token'); // Clear it if invalid
                 setUser(null);
             }
             setLoading(false);
@@ -22,25 +23,28 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const login = async (email, password) => {
-        const { data } = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+        const { data } = await API.post('/api/auth/login', { email, password });
+        if (data.token) localStorage.setItem('token', data.token);
         setUser(data);
         return data;
     };
 
     const register = async (userData) => {
-        const { data } = await axios.post('http://localhost:5000/api/auth/register', userData);
+        const { data } = await API.post('/api/auth/register', userData);
+        if (data.token) localStorage.setItem('token', data.token);
         setUser(data);
         return data;
     };
 
     const logout = async () => {
-        await axios.post('http://localhost:5000/api/auth/logout');
+        await API.post('/api/auth/logout');
+        localStorage.removeItem('token');
         setUser(null);
     };
 
     const updateUser = async (userData) => {
         try {
-            const { data } = await axios.put('http://localhost:5000/api/users/profile', userData);
+            const { data } = await API.put('/api/users/profile', userData);
             setUser(data);
             return data;
         } catch (error) {

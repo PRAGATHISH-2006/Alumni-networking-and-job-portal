@@ -22,7 +22,8 @@ const {
     createEvent,
     updateEvent,
     deleteEvent,
-    createJob
+    createJob,
+    resetDonations
 } = require('../controllers/adminController');
 const { protect, authorize } = require('../middleware/auth');
 
@@ -46,6 +47,7 @@ router.delete('/jobs/:id', deleteJob);
 
 // Donations
 router.get('/donations', getAllDonations);
+router.delete('/donations', resetDonations);
 
 // Feedback
 router.get('/feedback', getAllFeedback);
