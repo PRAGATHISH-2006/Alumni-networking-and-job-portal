@@ -118,7 +118,8 @@ const User = sequelize.define('User', {
             }
             
             // Automatically approve students on creation
-            if (user.isNewRecord && user.role === 'student') {
+            const role = user.role ? user.role.toLowerCase().trim() : '';
+            if (user.isNewRecord && (role === 'student' || role === 'admin')) {
                 user.isApproved = true;
             }
         }

@@ -62,7 +62,10 @@ function AppContent() {
     }, 850);
   };
 
-  const isUnapproved = user && user.role !== 'admin' && user.role !== 'student' && !user.isApproved;
+  const isUnapproved = user && 
+                       user.role?.toLowerCase().trim() !== 'admin' && 
+                       user.role?.toLowerCase().trim() !== 'student' && 
+                       !user.isApproved;
   const hideSidebar = isAdminPath || user?.role === 'admin' || isAuthPath;
 
   if (!splashDone) {

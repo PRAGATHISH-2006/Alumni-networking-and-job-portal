@@ -16,7 +16,8 @@ const AlumniDashboard = () => {
         );
     }
 
-    if (user && user.role === 'alumni' && !user.isApproved) {
+    const role = user?.role?.toLowerCase().trim();
+    if (user && role === 'alumni' && !user.isApproved) {
         return (
             <div className="role-dashboard pending-state">
                 <div className="container" style={{ textAlign: 'center', padding: '100px 20px' }}>

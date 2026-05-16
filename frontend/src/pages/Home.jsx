@@ -11,9 +11,10 @@ const Home = () => {
     const { user } = useAuth();
 
     if (user) {
-        if (user.role === 'student') return <StudentDashboard />;
-        if (user.role === 'alumni') return <AlumniDashboard />;
-        if (user.role === 'admin') return <AdminDashboard />;
+        const role = user.role?.toLowerCase().trim();
+        if (role === 'student') return <StudentDashboard />;
+        if (role === 'alumni') return <AlumniDashboard />;
+        if (role === 'admin') return <AdminDashboard />;
     }
 
     return (

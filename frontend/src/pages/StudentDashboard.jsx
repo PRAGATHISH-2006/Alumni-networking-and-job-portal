@@ -22,7 +22,7 @@ const StudentDashboard = () => {
                 setLoadingApps(false);
             }
         };
-        if (user && user.role === 'student' && user.isApproved) {
+        if (user && user.role?.toLowerCase().trim() === 'student') {
             fetchApplications();
         }
     }, [user]);

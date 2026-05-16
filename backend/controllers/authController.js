@@ -38,12 +38,13 @@ exports.registerUser = async (req, res) => {
             return res.status(400).json({ message: 'User already exists' });
         }
 
+        const cleanRole = (role || 'student').toLowerCase().trim();
         const user = await User.create({
             name,
             email: cleanEmail,
             password,
-            role,
-            isApproved: role === 'student' || role === 'admin', // Automatically approve students and admins
+            role: cleanRole,
+            isApproved: cleanRole === 'student' || cleanRole === 'admin', // Automatically approve students and admins
 
             skills: req.body.skills || [],
             company: req.body.company || '',

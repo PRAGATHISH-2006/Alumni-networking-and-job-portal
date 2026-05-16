@@ -43,7 +43,8 @@ const approved = (req, res, next) => {
     if (!req.user) {
         return res.status(401).json({ message: 'Not authorized' });
     }
-    if (req.user.role !== 'admin' && req.user.role !== 'student' && !req.user.isApproved) {
+    const role = req.user.role ? req.user.role.toLowerCase().trim() : '';
+    if (role !== 'admin' && role !== 'student' && !req.user.isApproved) {
         return res.status(403).json({ message: 'Account pending approval. Please wait for administrator verification.' });
     }
     next();

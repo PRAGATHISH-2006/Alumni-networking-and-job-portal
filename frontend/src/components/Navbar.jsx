@@ -24,7 +24,10 @@ const Navbar = () => {
         careersLinks.push({ label: 'Alumni Connect', path: '/alumni-chat' });
     }
 
-    const isUnapproved = user && user.role !== 'admin' && user.role !== 'student' && !user.isApproved;
+    const isUnapproved = user && 
+                         user.role?.toLowerCase().trim() !== 'admin' && 
+                         user.role?.toLowerCase().trim() !== 'student' && 
+                         !user.isApproved;
 
     const dropdownData = isAdminView ? [] : (isUnapproved ? [
         {
