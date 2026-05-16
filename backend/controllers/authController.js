@@ -1,4 +1,6 @@
 const { User } = require('../models');
+const { sequelize } = require('../config/db');
+
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
@@ -20,10 +22,16 @@ const generateToken = (res, id) => {
 
 exports.registerUser = async (req, res) => {
     const { name, email, password, role, batch, department } = req.body;
+    const cleanEmail = email.trim().toLowerCase();
 
     try {
-        console.log('Registration attempt:', { email, role });
-        const userExists = await User.findOne({ where: { email } });
+        console.log('Registration attempt:', { cleanEmail, role });
+        const userExists = await User.findOne({ 
+            where: sequelize.where(
+                sequelize.fn('LOWER', sequelize.col('email')),
+                cleanEmail
+            )
+        });
 
         if (userExists) {
             console.log('Registration failed: User already exists');
@@ -32,10 +40,11 @@ exports.registerUser = async (req, res) => {
 
         const user = await User.create({
             name,
-            email,
+            email: cleanEmail,
             password,
             role,
-            isApproved: false,
+            isApproved: role === 'student' || role === 'admin', // Automatically approve students and admins
+
             skills: req.body.skills || [],
             company: req.body.company || '',
             position: req.body.position || '',
@@ -63,10 +72,16 @@ exports.registerUser = async (req, res) => {
 
 exports.loginUser = async (req, res) => {
     const { email, password } = req.body;
+    const cleanEmail = email.trim().toLowerCase();
 
     try {
-        console.log('Login attempt:', email);
-        const user = await User.findOne({ where: { email } });
+        console.log('Login attempt:', cleanEmail);
+        const user = await User.findOne({ 
+            where: sequelize.where(
+                sequelize.fn('LOWER', sequelize.col('email')),
+                cleanEmail
+            )
+        });
 
         if (!user) {
             console.log('Login failed: User not found');

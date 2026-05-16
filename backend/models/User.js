@@ -116,6 +116,11 @@ const User = sequelize.define('User', {
             if (user.changed('password')) {
                 user.password = await bcrypt.hash(user.password, 12);
             }
+            
+            // Automatically approve students on creation
+            if (user.isNewRecord && user.role === 'student') {
+                user.isApproved = true;
+            }
         }
     }
 });

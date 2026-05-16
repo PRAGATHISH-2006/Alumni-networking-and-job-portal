@@ -5,7 +5,7 @@ exports.getDashboardStats = async (req, res) => {
     try {
         const studentCount = await User.count({ where: { role: 'student' } });
         const alumniCount = await User.count({ where: { role: 'alumni' } });
-        const pendingUsers = await User.count({ where: { role: { [Op.in]: ['alumni', 'student'] }, isApproved: false } });
+        const pendingUsers = await User.count({ where: { role: 'alumni', isApproved: false } });
         const jobCount = await Job.count();
         const eventCount = await Event.count();
         const donationCount = await Donation.count();
@@ -166,7 +166,7 @@ exports.getPendingUsers = async (req, res) => {
     try {
         const pending = await User.findAll({
             where: { 
-                role: { [Op.in]: ['alumni', 'student'] }, 
+                role: 'alumni', 
                 isApproved: false 
             },
             attributes: { exclude: ['password'] }

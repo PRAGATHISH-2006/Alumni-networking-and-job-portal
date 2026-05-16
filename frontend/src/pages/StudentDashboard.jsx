@@ -34,28 +34,6 @@ const StudentDashboard = () => {
             </div>
         );
     }
-    if (user && user.role === 'student' && !user.isApproved) {
-        return (
-            <div className="role-dashboard pending-state">
-                <div className="container" style={{ textAlign: 'center', padding: '100px 20px' }}>
-                    <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}>
-                        <div className="glass-card" style={{ padding: '3rem', maxWidth: '600px', margin: '0 auto' }}>
-                            <ShieldCheck size={64} color="var(--primary)" style={{ marginBottom: '1.5rem' }} />
-                            <h1 style={{ marginBottom: '1rem' }}>Account <span className="gradient-text">Pending Approval</span></h1>
-                            <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', marginBottom: '2rem' }}>
-                                Thank you for joining our community, <strong>{user.name}</strong>! <br/><br/> 
-                                Your student account is currently being reviewed by the administration. You will gain full access to the portal once your status is verified.
-                            </p>
-                            <div className="pending-actions">
-                                <Link to="/support" className="btn btn-outline" style={{ marginRight: '1rem' }}>Contact Support</Link>
-                                <button onClick={() => window.location.reload()} className="btn btn-primary">Check Status</button>
-                            </div>
-                        </div>
-                    </motion.div>
-                </div>
-            </div>
-        );
-    }
 
     return (
         <div className="role-dashboard">

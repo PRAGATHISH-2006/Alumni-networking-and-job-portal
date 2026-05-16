@@ -22,7 +22,7 @@ const Sidebar = () => {
         { path: '/', icon: <LayoutDashboard size={20} />, label: 'Dashboard' },
     ];
 
-    const isUnapproved = user && user.role !== 'admin' && !user.isApproved;
+    const isUnapproved = user && user.role !== 'admin' && user.role !== 'student' && !user.isApproved;
 
     if (user?.role === 'admin') {
         menuItems.push({ path: '/admin', icon: <Shield size={20} />, label: 'Admin Panel' });
