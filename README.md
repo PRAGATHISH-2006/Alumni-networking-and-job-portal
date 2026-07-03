@@ -6,7 +6,7 @@
   **A powerful platform bridging the gap between alumni, students, and institutions.**
   
   [![Live Demo](https://img.shields.io/badge/Live_Demo-Available-success?style=for-the-badge&logo=vercel)](https://alumni-networking-and-job-portal.vercel.app/)
-  [![Tech Stack](https://img.shields.io/badge/Tech_Stack-MERN(MySQL)-blue?style=for-the-badge)](#-tech-stack)
+  [![Tech Stack](https://img.shields.io/badge/Tech_Stack-React_Express_SQL-blue?style=for-the-badge)](#-tech-stack)
   [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](#-license)
 
   <p align="center">
@@ -56,7 +56,8 @@ By leveraging a robust backend architecture and an interactive frontend, this pl
 ### Backend
 *   **Node.js & Express** - Server Environment & Framework
 *   **Sequelize** - Modern ORM for Node.js
-*   **MySQL** - Relational Database
+*   **PostgreSQL / Supabase** - Primary Relational Database
+*   **MySQL** - Relational Database (Alternative/Local)
 *   **JWT & bcryptjs** - Authentication & Security
 *   **Multer** - File Upload Handling
 
@@ -76,7 +77,7 @@ Follow these instructions to set up the project locally on your machine.
 ### Prerequisites
 
 *   [Node.js](https://nodejs.org/) (v16 or higher)
-*   [MySQL Server](https://dev.mysql.com/downloads/mysql/)
+*   [Supabase Account](https://supabase.com/) (Optional, for PostgreSQL database) or [MySQL Server](https://dev.mysql.com/downloads/mysql/) (for local database)
 
 ### Installation Steps
 
@@ -87,9 +88,14 @@ Follow these instructions to set up the project locally on your machine.
     ```
 
 2.  **Database Setup**:
-    *   Create a new MySQL database for the project.
-    *   Update the database configuration in `backend/.env`.
-    *   (Optional) Run the provided `database.sql` script to initialize the schema.
+    *   **Option A: PostgreSQL / Supabase (Recommended)**:
+        *   Create a new project on [Supabase](https://supabase.com/).
+        *   Execute the SQL queries in `supabase_setup.sql` in the Supabase SQL editor to set up tables.
+        *   Copy the database URL/Connection String and set it as `DATABASE_URL` in `backend/.env`.
+    *   **Option B: Local MySQL**:
+        *   Create a new MySQL database for the project.
+        *   Update the database configuration variables (`DB_HOST`, `DB_USER`, `DB_PASS`, `DB_NAME`) in `backend/.env`.
+        *   (Optional) Run the provided `database.sql` script to initialize the schema.
 
 3.  **Backend Setup**:
     ```bash
