@@ -2,6 +2,7 @@ const User = require('./User');
 const Job = require('./Job');
 const Event = require('./Event');
 const Mentorship = require('./Mentorship');
+const MentorshipSession = require('./MentorshipSession');
 const Message = require('./Message');
 const Donation = require('./Donation');
 const Story = require('./Story');
@@ -60,6 +61,11 @@ User.hasMany(Mentorship, { foreignKey: 'studentId', as: 'learningRequests' });
 Mentorship.belongsTo(User, { foreignKey: 'mentorId', as: 'mentor' });
 Mentorship.belongsTo(User, { foreignKey: 'studentId', as: 'student' });
 
+User.hasMany(MentorshipSession, { foreignKey: 'mentorId', as: 'mentoringSessions' });
+User.hasMany(MentorshipSession, { foreignKey: 'studentId', as: 'learningSessions' });
+MentorshipSession.belongsTo(User, { foreignKey: 'mentorId', as: 'mentor' });
+MentorshipSession.belongsTo(User, { foreignKey: 'studentId', as: 'student' });
+
 // Message Associations
 User.hasMany(Message, { foreignKey: 'senderId', as: 'sentMessages' });
 User.hasMany(Message, { foreignKey: 'receiverId', as: 'receivedMessages' });
@@ -74,4 +80,4 @@ Donation.belongsTo(User, { foreignKey: 'donorId', as: 'donor' });
 User.hasMany(Story, { foreignKey: 'userId', as: 'stories' });
 Story.belongsTo(User, { foreignKey: 'userId', as: 'author' });
 
-module.exports = { User, Job, Event, Mentorship, Message, Donation, Story, Feedback, Menu };
+module.exports = { User, Job, Event, Mentorship, MentorshipSession, Message, Donation, Story, Feedback, Menu };

@@ -9,7 +9,8 @@ import {
     Trophy,
     MessageSquare,
     LogOut,
-    Shield
+    Shield,
+    UserCheck
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import './Sidebar.css';
@@ -18,36 +19,33 @@ const Sidebar = () => {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
 
+    const role = user?.role?.toLowerCase().trim();
+
     const menuItems = [
         { path: '/', icon: <LayoutDashboard size={20} />, label: 'Dashboard' },
     ];
 
-    const isUnapproved = user && 
-                         user.role?.toLowerCase().trim() !== 'admin' && 
-                         user.role?.toLowerCase().trim() !== 'student' && 
-                         !user.isApproved;
-
-    if (user?.role === 'admin') {
+    if (role === 'admin') {
         menuItems.push({ path: '/admin', icon: <Shield size={20} />, label: 'Admin Panel' });
     }
 
-    if (!isUnapproved) {
-        menuItems.push(
-            { path: '/directory', icon: <Share2 size={20} />, label: 'Networking Hub' },
-            { path: '/jobs', icon: <Briefcase size={20} />, label: 'Job Portal' },
-        );
+    // Always show Mentorship, Networking, and Job Portal for alumni, students, and active members
+    menuItems.push(
+        { path: '/directory', icon: <Share2 size={20} />, label: 'Networking Hub' },
+        { path: '/mentorship', icon: <UserCheck size={20} />, label: 'Mentorship' },
+        { path: '/jobs', icon: <Briefcase size={20} />, label: 'Job Portal' },
+    );
 
-        if (user?.role === 'alumni') {
-            menuItems.push({ path: '/alumni-chat', icon: <MessageSquare size={20} />, label: 'Alumni Connect' });
-        }
-
-        menuItems.push(
-            { path: '/donate', icon: <HeartHandshake size={20} />, label: 'Donations' },
-            { path: '/events', icon: <Calendar size={20} />, label: 'Events & Reunions' },
-            { path: '/stories', icon: <Trophy size={20} />, label: 'Success Stories' },
-            { path: '/feedback', icon: <MessageSquare size={20} />, label: 'Feedback' },
-        );
+    if (role === 'alumni') {
+        menuItems.push({ path: '/alumni-chat', icon: <MessageSquare size={20} />, label: 'Alumni Connect' });
     }
+
+    menuItems.push(
+        { path: '/donate', icon: <HeartHandshake size={20} />, label: 'Donations' },
+        { path: '/events', icon: <Calendar size={20} />, label: 'Events & Reunions' },
+        { path: '/stories', icon: <Trophy size={20} />, label: 'Success Stories' },
+        { path: '/feedback', icon: <MessageSquare size={20} />, label: 'Feedback' },
+    );
 
     return (
         <aside className="sidebar">

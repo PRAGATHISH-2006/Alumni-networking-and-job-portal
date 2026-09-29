@@ -29,14 +29,17 @@ import AlumniChat from './pages/AlumniChat';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { CallProvider } from './context/CallContext';
 import { AnimatePresence } from 'framer-motion';
 
 function App() {
   return (
     <AuthProvider>
-      <Router>
-        <AppContent />
-      </Router>
+      <CallProvider>
+        <Router>
+          <AppContent />
+        </Router>
+      </CallProvider>
     </AuthProvider>
   );
 }
